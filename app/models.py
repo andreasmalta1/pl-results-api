@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
-from sqlalchemy.sql.sqltypes import TIMESTAMP
+from sqlalchemy.sql.sqltypes import TIMESTAMP, DATE
 
 from .database import Base
 
@@ -9,73 +9,52 @@ from .database import Base
 class Team(Base):
     __tablename__ = "teams"
 
-    # id = Column(Integer, primary_key=True, nullable=False)
-    # full_name = Column(String, nullable=False)
-    # name = Column(String, nullable=False)
-    # code = Column(String, nullable=True)
-    # nickname = Column(String, nullable=True)
-    # stadium = Column(String, nullable=True)
-    # competition = Column(String, nullable=True)
-    # country = Column(String, nullable=True)
-    # location = Column(String, nullable=True)
-    # logo_url_small = Column(String, nullable=True)
-    # logo_url_medium = Column(String, nullable=True)
-    # logo_url_large = Column(String, nullable=True)
-    # twitter_handle = Column(String, nullable=True)
-    # website = Column(String, nullable=True)
-    # national_team = Column(Boolean, server_default="False")
-    # year_formed = Column(Integer, nullable=True)
-    # player_record_appearances = Column(String, nullable=True)
-    # record_num_appearances = Column(Integer, nullable=False, server_default=text("0"))
-    # player_record_goals = Column(String, nullable=True)
-    # record_num_goals = Column(Integer, nullable=False, server_default=text("0"))
-    # num_domestic_champions = Column(Integer, nullable=False, server_default=text("0"))
-    # created_at = Column(
-    #     TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
-    # )
-
-    # team name
-    # team id
-    # current
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    alternative_name = Column(String, nullable=False)
+    current_team = Column(Boolean, server_default="False")
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
 
 class Match(Base):
-    __tablename__ = "users"
+    __tablename__ = "matches"
 
-    # id = Column(Integer, primary_key=True, nullable=False)
-    # email = Column(String, nullable=False, unique=True)
-    # password = Column(String, nullable=False)
-    # created_at = Column(
-    #     TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
-    # )
-
-    # id
-    # home team - Foreign key
-    # home score
-    # away team - Foreign key
-    # away score
-    # date
-    # season
-    # date_added
-
-
-class Manager(Base):
-    pass
-    # id  - fotmob id
-    # manager name
-    # nationality - Foreign Key
-    # club - Foreign Key
-    # date start
-    # date end
-    # current - boolean
-    # date added
+    id = Column(Integer, primary_key=True, nullable=False)
+    home_id = Column(Integer, ForeignKey("teams.id"))
+    home_score = Column(Integer, server_default="0")
+    away_id = Column(Integer, ForeignKey("teams.id"))
+    away_score = Column(Integer, server_default="")
+    date = Column(DATE, server_default="CURRENT_DATE")
+    season = Column(String(9), nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
 
 class Nations:
-    pass
-    # nation name
-    # nation id -> fotmob id
-    # date added
+    __tablename__ = "nations"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+
+class Manager(Base):
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    fotmob_id = Column(String, nullable=False, unique=True)
+    nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
+    team = Column(Integer, ForeignKey("team.id"), nullable=False)
+    date_start = Column(DATE, nullable=False)
+    date_start = Column(DATE)
+    curent = Column(Boolean, server_default=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
 
 class LastRow:
