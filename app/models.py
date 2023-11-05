@@ -33,7 +33,7 @@ class Match(Base):
     )
 
 
-class Nations:
+class Nation:
     __tablename__ = "nations"
 
     id = Column(Integer, primary_key=True, nullable=False)
