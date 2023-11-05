@@ -44,3 +44,36 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# endpoints
+## teams:
+### get_team
+### get_teams --> all, limit, page
+### post_team
+### update_team
+
+## matches
+### get_match
+### get_all_matches
+#### by season
+#### by team
+#### limit + pagination (optional)
+### post_match
+### update match
+### delete match
+
+## nations
+### get_nation
+### get_nations
+### post_nation
+### update nation
+### delete nation
+
+## managers
+### get_manager
+### get_all managers
+#### get current // non-current
+#### limit + pagination (optional)
+### post mnager
+### update manager
+### delete manager

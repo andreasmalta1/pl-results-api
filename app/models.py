@@ -58,5 +58,5 @@ class Manager(Base):
 
 
 class LastRow:
-    pass
-    # last row
+    id = Column(Integer, primary_key=True, nullable=False)
+    last_row = Column(Integer, primary_key=True, nullable=False)
