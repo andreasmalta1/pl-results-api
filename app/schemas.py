@@ -56,3 +56,46 @@ class MatchResponse(MatchModel):
 class NationModel(BaseModel):
     id: int
     name: str
+
+class NationCreate(NationModel):
+    pass
+
+class NationResponse(MatchModel):
+    class Config:
+        orm_mode = True
+
+
+class ManagerModel(BaseModel):
+    name: str
+    fotmob_id: int
+    nationality: int
+    team: int
+    date_start: date
+    date_end: date
+    current: bool
+
+
+class ManagerCreate(ManagerModel):
+    pass
+
+
+class ManagerResponse(ManagerModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class LastRowModel(BaseModel):
+    last_row: int
+
+
+class LastRowCreate(LastRowModel):
+    pass
+
+
+class LastRowResponse(LastRowModel):
+    id: int
+
+    class Config:
+        orm_mode = True

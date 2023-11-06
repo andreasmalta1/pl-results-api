@@ -44,13 +44,14 @@ class Nation:
 
 
 class Manager(Base):
+    __tablename__ = "managers"
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
     fotmob_id = Column(String, nullable=False, unique=True)
     nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
     team = Column(Integer, ForeignKey("team.id"), nullable=False)
     date_start = Column(DATE, nullable=False)
-    date_start = Column(DATE)
+    date_end = Column(DATE)
     curent = Column(Boolean, server_default=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
@@ -58,5 +59,6 @@ class Manager(Base):
 
 
 class LastRow:
+    __tablename__ = "lastrow"
     id = Column(Integer, primary_key=True, nullable=False)
     last_row = Column(Integer, primary_key=True, nullable=False)
