@@ -1,27 +1,13 @@
 from pydantic import BaseModel
 from datetime import date
-
-# class TeamBase(BaseModel):
-#     full_name: str
-#     name: str
-#     code: Optional[str]
-#     nickname: Optional[str]
-#     stadium: Optional[str]
-#     competition: Optional[str]
-#     website: Optional[str]
-#     twitter_handle: Optional[str]
-#     national_team: Optional[bool]
-#     year_formed: Optional[int]
-#     country: Optional[str]
-#     location: Optional[str]
-#     num_domestic_champions: Optional[int]
+from typing import Optional, Union
 
 
 class TeamModel(BaseModel):
     id: int
     name: str
     alternative_name: str
-    current_team: bool
+    current_team: bool = False
 
 
 class TeamCreate(TeamModel):
@@ -30,7 +16,7 @@ class TeamCreate(TeamModel):
 
 class TeamResponse(TeamModel):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class MatchModel(BaseModel):
@@ -50,19 +36,21 @@ class MatchResponse(MatchModel):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class NationModel(BaseModel):
     id: int
     name: str
 
+
 class NationCreate(NationModel):
     pass
 
+
 class NationResponse(MatchModel):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ManagerModel(BaseModel):
@@ -83,7 +71,7 @@ class ManagerResponse(ManagerModel):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LastRowModel(BaseModel):
@@ -98,4 +86,4 @@ class LastRowResponse(LastRowModel):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

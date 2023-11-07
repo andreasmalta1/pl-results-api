@@ -3,6 +3,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import match, team
+from app.database import Base, engine
+
+
+Base.metadata.create_all(bind=engine)
+
 
 tags_metadata = [
     {
@@ -31,8 +36,8 @@ app = FastAPI(
     openapi_tags=tags_metadata,
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-app.include_router(match.router)
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.include_router(match.router)
 app.include_router(team.router)
 
 origins = ["*"]
@@ -47,10 +52,9 @@ app.add_middleware(
 
 # endpoints
 ## teams:
-### get_team
-### get_teams --> all, limit, page
-### post_team
+### get current team // non-current teams
 ### update_team
+### delete team
 
 ## matches
 ### get_match

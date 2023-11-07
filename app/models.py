@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP, DATE
 
@@ -25,15 +24,15 @@ class Match(Base):
     home_id = Column(Integer, ForeignKey("teams.id"))
     home_score = Column(Integer, server_default="0")
     away_id = Column(Integer, ForeignKey("teams.id"))
-    away_score = Column(Integer, server_default="")
-    date = Column(DATE, server_default="CURRENT_DATE")
+    away_score = Column(Integer, server_default="0")
+    date = Column(DATE, server_default="now()")
     season = Column(String(9), nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
 
 
-class Nation:
+class Nation(Base):
     __tablename__ = "nations"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -45,14 +44,15 @@ class Nation:
 
 class Manager(Base):
     __tablename__ = "managers"
+
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
     fotmob_id = Column(String, nullable=False, unique=True)
     nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
-    team = Column(Integer, ForeignKey("team.id"), nullable=False)
+    team = Column(Integer, ForeignKey("teams.id"), nullable=False)
     date_start = Column(DATE, nullable=False)
     date_end = Column(DATE)
-    curent = Column(Boolean, server_default=False)
+    current = Column(Boolean, server_default="False")
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
