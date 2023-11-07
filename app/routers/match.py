@@ -1,4 +1,5 @@
 from fastapi import status, APIRouter, HTTPException, Response, Depends
+from fastapi_pagination import Page, paginate
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -46,24 +47,13 @@ def create_match(
     return new_match
 
 
-# @router.get("/", response_model=List[schemas.TeamResponse])
-# def get_teams(
-#     db: Session = Depends(get_db),
-#     limit: int = 10,
-#     current: bool | None = None,
-# ):
-#     if current != None:
-#         results = (
-#             db.query(models.Team)
-#             .order_by(models.Team.id)
-#             .filter(models.Team.current_team == current)
-#             .limit(limit)
-#             .all()
-#         )
-#         return results
-
-#     results = db.query(models.Team).order_by(models.Team.id).limit(limit).all()
-#     return results
+@router.get("/", response_model=Page[schemas.MatchResponse])
+def get_matches(
+    db: Session = Depends(get_db),
+    # current: bool | None = None,
+):
+    matches = db.query(models.Match).order_by(models.Match.id).all()
+    return paginate(matches)
 
 
 # @router.get("/{id}", response_model=schemas.TeamResponse)

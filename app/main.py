@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
 
 from app.routers import match, team
 from app.database import Base, engine
@@ -39,6 +40,8 @@ app = FastAPI(
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(team.router)
 app.include_router(match.router)
+
+add_pagination(app)
 
 origins = ["*"]
 

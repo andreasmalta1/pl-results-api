@@ -1,4 +1,5 @@
 from fastapi import status, APIRouter, HTTPException, Response, Depends
+from fastapi_pagination import Page, paginate
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -28,24 +29,22 @@ def create_team(
     return new_team
 
 
-@router.get("/", response_model=List[schemas.TeamResponse])
+@router.get("/", response_model=Page[schemas.TeamResponse])
 def get_teams(
     db: Session = Depends(get_db),
-    limit: int = 10,
     current: bool | None = None,
 ):
     if current != None:
-        results = (
+        teams = (
             db.query(models.Team)
             .order_by(models.Team.id)
             .filter(models.Team.current_team == current)
-            .limit(limit)
             .all()
         )
-        return results
+        return paginate(teams)
 
-    results = db.query(models.Team).order_by(models.Team.id).limit(limit).all()
-    return results
+    teams = db.query(models.Team).order_by(models.Team.id).all()
+    return paginate(teams)
 
 
 @router.get("/{id}", response_model=schemas.TeamResponse)
