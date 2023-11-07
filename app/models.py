@@ -25,7 +25,7 @@ class Match(Base):
     home_score = Column(Integer, server_default="0")
     away_id = Column(Integer, ForeignKey("teams.id"))
     away_score = Column(Integer, server_default="0")
-    date = Column(DATE, server_default="now()")
+    match_date = Column(DATE, server_default="now()")
     season = Column(String(9), nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")

@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+import os
+from pydantic import BaseModel, Field
 from datetime import date
-from typing import Optional, Union
+from typing import Optional
 
 
 class TeamModel(BaseModel):
@@ -24,8 +25,10 @@ class MatchModel(BaseModel):
     home_score: int
     away_id: int
     away_score: int
-    date: date
-    season: str
+    match_date: Optional[date] = date.today()
+    season: Optional[str] = Field(
+        min_length=9, max_length=9, default=os.getenv("CURRENT_SEASON")
+    )
 
 
 class MatchCreate(MatchModel):

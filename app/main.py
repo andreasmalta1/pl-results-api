@@ -37,8 +37,8 @@ app = FastAPI(
 )
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
-# app.include_router(match.router)
 app.include_router(team.router)
+app.include_router(match.router)
 
 origins = ["*"]
 
@@ -49,12 +49,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# endpoints
-## teams:
-### get current team // non-current teams
-### update_team
-### delete team
 
 ## matches
 ### get_match
