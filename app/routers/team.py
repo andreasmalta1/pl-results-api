@@ -1,7 +1,8 @@
 from fastapi import status, APIRouter, HTTPException, Response, Depends
-from fastapi_pagination import Page, paginate
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy import select
 from sqlalchemy.orm import Session
-from typing import List
 
 from app.database import get_db
 import app.schemas as schemas
@@ -35,16 +36,15 @@ def get_teams(
     current: bool | None = None,
 ):
     if current != None:
-        teams = (
-            db.query(models.Team)
+        teams_query = (
+            select(models.Team)
             .order_by(models.Team.id)
             .filter(models.Team.current_team == current)
-            .all()
         )
-        return paginate(teams)
+        return paginate(db, teams_query)
 
-    teams = db.query(models.Team).order_by(models.Team.id).all()
-    return paginate(teams)
+    teams_query = select(models.Team).order_by(models.Team.id)
+    return paginate(db, teams_query)
 
 
 @router.get("/{id}", response_model=schemas.TeamResponse)
