@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 
-from app.routers import team, match, nation
+from app.routers import team, match, nation, manager
 from app.database import Base, engine
 
 
@@ -41,6 +41,7 @@ app = FastAPI(
 app.include_router(team.router)
 app.include_router(match.router)
 app.include_router(nation.router)
+app.include_router(manager.router)
 
 add_pagination(app)
 
@@ -59,20 +60,3 @@ app.add_middleware(
 # Prep script to update every match played
 # Prep how to update to new season (new season env var will not work)
 # Prep to deploy
-
-## nations
-### get_nation
-### get_nations
-### post_nation
-### update nation
-### delete nation
-
-## managers
-### get_manager
-### get_all managers
-#### get current // non-current
-#### get by nations
-#### get by club
-### post mnager
-### update manager
-### delete manager

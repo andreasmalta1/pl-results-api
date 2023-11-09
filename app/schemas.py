@@ -62,8 +62,8 @@ class ManagerModel(BaseModel):
     nationality: int
     team: int
     date_start: date
-    date_end: date
-    current: bool
+    date_end: Optional[date] = None
+    current: bool = False
 
 
 class ManagerCreate(ManagerModel):

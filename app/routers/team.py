@@ -35,15 +35,10 @@ def get_teams(
     db: Session = Depends(get_db),
     current: bool | None = None,
 ):
-    if current != None:
-        teams_query = (
-            select(models.Team)
-            .order_by(models.Team.id)
-            .filter(models.Team.current_team == current)
-        )
-        return paginate(db, teams_query)
-
     teams_query = select(models.Team).order_by(models.Team.id)
+    if current != None:
+        teams_query = teams_query.filter(models.Team.current_team == current)
+
     return paginate(db, teams_query)
 
 

@@ -1,7 +1,7 @@
 from fastapi import status, APIRouter, HTTPException, Response, Depends
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import select, or_
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
