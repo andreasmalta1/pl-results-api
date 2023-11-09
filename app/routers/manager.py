@@ -131,7 +131,42 @@ def update_manager(
             detail=f"Manager with id {id} was not found",
         )
 
-    manager_query.update(updated_manager.model_dump(), synchronize_session=False)
+    updated_manager = updated_manager.model_dump()
+    team_id = updated_manager.get("team")
+    nation_id = updated_manager.get("nationality")
+
+    team = db.query(models.Team).filter(models.Team.id == team_id).first()
+    nation = db.query(models.Nation).filter(models.Nation.id == nation_id).first()
+
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Team with id {team_id} was not found",
+        )
+
+    if not nation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Nation with id {nation_id} was not found",
+        )
+
+    if updated_manager.get("current") == True:
+        updated_manager["date_end"] = None
+
+    if updated_manager.get("current") == False:
+        if not updated_manager.get("date_end"):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Managers which are not current must have an date end",
+            )
+
+        if updated_manager.get("date_start") >= updated_manager.get("date_end"):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Manager start date must be before manager end date",
+            )
+
+    manager_query.update(updated_manager, synchronize_session=False)
     db.commit()
 
     return manager_query.first()
