@@ -47,7 +47,7 @@ class Manager(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
-    fotmob_id = Column(String, nullable=False, unique=True)
+    fotmob_id = Column(String, nullable=False)
     nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
     team = Column(Integer, ForeignKey("teams.id"), nullable=False)
     date_start = Column(DATE, nullable=False)
