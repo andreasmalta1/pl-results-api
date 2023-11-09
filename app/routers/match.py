@@ -1,7 +1,8 @@
 from fastapi import status, APIRouter, HTTPException, Response, Depends
-from fastapi_pagination import Page, paginate
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
-from typing import List
 
 from app.database import get_db
 import app.schemas as schemas
@@ -50,61 +51,69 @@ def create_match(
 @router.get("/", response_model=Page[schemas.MatchResponse])
 def get_matches(
     db: Session = Depends(get_db),
-    # current: bool | None = None,
+    season: str | None = None,
+    team: int | None = None,
 ):
-    matches = db.query(models.Match).order_by(models.Match.id).all()
-    return paginate(matches)
+    match_query = select(models.Match).order_by(models.Match.id)
+    if season:
+        match_query = match_query.filter(models.Match.season == season)
+    if team:
+        match_query = match_query.filter(
+            or_(models.Match.home_id == team, models.Match.away_id == team)
+        )
+
+    return paginate(db, match_query)
 
 
-# @router.get("/{id}", response_model=schemas.TeamResponse)
-# def get_team(id: int, db: Session = Depends(get_db)):
-#     team = db.query(models.Team).filter(models.Team.id == id).first()
+@router.get("/{id}", response_model=schemas.MatchResponse)
+def get_match(id: int, db: Session = Depends(get_db)):
+    match = db.query(models.Match).filter(models.Match.id == id).first()
 
-#     if not team:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail=f"Team with id {id} was not found",
-#         )
+    if not match:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Match with id {id} was not found",
+        )
 
-#     return team
-
-
-# @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
-# def delete_team(
-#     id: int,
-#     db: Session = Depends(get_db),
-# ):
-#     team_query = db.query(models.Team).filter(models.Team.id == id)
-#     team = team_query.first()
-
-#     if team == None:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail=f"Team with id {id} was not found",
-#         )
-
-#     team_query.delete(synchronize_session=False)
-#     db.commit()
-
-#     return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return match
 
 
-# @router.put("/{id}", response_model=schemas.TeamResponse, include_in_schema=False)
-# def update_team(
-#     id: int,
-#     updated_team: schemas.TeamCreate,
-#     db: Session = Depends(get_db),
-# ):
-#     team_query = db.query(models.Team).filter(models.Team.id == id)
-#     team = team_query.first()
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
+def delete_match(
+    id: int,
+    db: Session = Depends(get_db),
+):
+    match_query = db.query(models.Match).filter(models.Match.id == id)
+    match = match_query.first()
 
-#     if team == None:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail=f"Team with id {id} was not found",
-#         )
+    if match == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Match with id {id} was not found",
+        )
 
-#     team_query.update(updated_team.dict(), synchronize_session=False)
-#     db.commit()
+    match_query.delete(synchronize_session=False)
+    db.commit()
 
-#     return team_query.first()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.put("/{id}", response_model=schemas.MatchResponse, include_in_schema=False)
+def update_match(
+    id: int,
+    updated_match: schemas.MatchCreate,
+    db: Session = Depends(get_db),
+):
+    match_query = db.query(models.Match).filter(models.Match.id == id)
+    match = match_query.first()
+
+    if match == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Match with id {id} was not found",
+        )
+
+    match_query.update(updated_match.model_dump(), synchronize_session=False)
+    db.commit()
+
+    return match_query.first()

@@ -95,7 +95,7 @@ def update_team(
             detail=f"Team with id {id} was not found",
         )
 
-    team_query.update(updated_team.dict(), synchronize_session=False)
+    team_query.update(updated_team.model_dump(), synchronize_session=False)
     db.commit()
 
     return team_query.first()

@@ -53,13 +53,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+### API KEY
+
 ## matches
-### get_match
-### get_all_matches
-#### by season
-#### by team
-#### limit + pagination (optional)
-### post_match
 ### update match
 ### delete match
 
