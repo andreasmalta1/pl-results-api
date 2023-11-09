@@ -56,6 +56,13 @@ app.add_middleware(
 )
 
 # API KEY
+## For now, API Key equals env var
+## Create user model, with stored API keys
+### https://www.vidavolta.io/fastapi-api-keys/
+# Ask seperate API from website
+# Deploy website using AWS
+# Caching
+# Welcome page
 # Prep script for initial data
 # Prep script to update every match played
 # Prep how to update to new season (new season env var will not work)
