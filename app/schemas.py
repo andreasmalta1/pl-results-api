@@ -51,7 +51,7 @@ class NationCreate(NationModel):
     pass
 
 
-class NationResponse(MatchModel):
+class NationResponse(NationModel):
     class Config:
         from_attributes = True
 
