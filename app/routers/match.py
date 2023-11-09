@@ -113,7 +113,26 @@ def update_match(
             detail=f"Match with id {id} was not found",
         )
 
-    match_query.update(updated_match.model_dump(), synchronize_session=False)
+    updated_match = updated_match.model_dump()
+    home_id = updated_match.get("home_id")
+    away_id = updated_match.get("away_id")
+
+    home_team = db.query(models.Team).filter(models.Team.id == home_id).first()
+    away_team = db.query(models.Team).filter(models.Team.id == away_id).first()
+
+    if not home_team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Home team with id {home_id} was not found",
+        )
+
+    if not away_team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Away team with id {away_id} was not found",
+        )
+
+    match_query.update(updated_match, synchronize_session=False)
     db.commit()
 
     return match_query.first()
