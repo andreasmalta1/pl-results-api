@@ -22,7 +22,7 @@ description = """
 
 
 app = FastAPI(
-    title="PL Results Table",
+    title="PL Results API",
     description=description,
     swagger_ui_parameters={"defaultModelsExpandDepth": -1},
     version="1.0.0",
