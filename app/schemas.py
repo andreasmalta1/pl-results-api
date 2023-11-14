@@ -1,5 +1,5 @@
 import os
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from datetime import date
 from typing import Optional
 
@@ -87,6 +87,22 @@ class LastRowCreate(LastRowModel):
 
 class LastRowResponse(LastRowModel):
     id: int
+
+    class Config:
+        from_attributes = True
+
+
+class UserBase(BaseModel):
+    email: EmailStr
+    admin: bool
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserResponse(UserBase):
+    pass
 
     class Config:
         from_attributes = True

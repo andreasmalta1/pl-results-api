@@ -58,7 +58,20 @@ class Manager(Base):
     )
 
 
-class LastRow:
+class LastRow(Base):
     __tablename__ = "lastrow"
+
     id = Column(Integer, primary_key=True, nullable=False)
     last_row = Column(Integer, primary_key=True, nullable=False)
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+    api_key = Column(String, nullable=False, unique=True)
+    admin = Column(Boolean, server_default="False")
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
