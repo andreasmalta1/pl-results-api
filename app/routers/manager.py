@@ -1,4 +1,4 @@
-from fastapi import status, APIRouter, HTTPException, Response, Depends
+from fastapi import status, APIRouter, Depends, HTTPException, Response
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
