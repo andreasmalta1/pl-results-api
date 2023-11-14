@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.auth import get_api_key
+from app.auth import get_api_key, authorization_error
 import app.schemas as schemas
 import app.models as models
 
@@ -22,7 +22,11 @@ router = APIRouter(prefix="/api/managers", tags=["Managers"])
 def create_manager(
     manager: schemas.ManagerCreate,
     db: Session = Depends(get_db),
+    api_key: str = Security(get_api_key),
 ):
+    if not api_key:
+        authorization_error()
+
     new_manager = models.Manager(**manager.model_dump())
     team_id = new_manager.team
     nation_id = new_manager.nationality
@@ -86,7 +90,11 @@ def get_managers(
 
 
 @router.get("/{id}", response_model=schemas.ManagerResponse)
-def get_manager(id: int, db: Session = Depends(get_db)):
+def get_manager(
+    id: int,
+    db: Session = Depends(get_db),
+    api_key: str = Security(get_api_key),
+):
     manager = db.query(models.Manager).filter(models.Manager.id == id).first()
 
     if not manager:
@@ -102,7 +110,11 @@ def get_manager(id: int, db: Session = Depends(get_db)):
 def delete_manager(
     id: int,
     db: Session = Depends(get_db),
+    api_key: str = Security(get_api_key),
 ):
+    if not api_key:
+        authorization_error()
+
     manager_query = db.query(models.Manager).filter(models.Manager.id == id)
     manager = manager_query.first()
 
@@ -123,7 +135,11 @@ def update_manager(
     id: int,
     updated_manager: schemas.ManagerCreate,
     db: Session = Depends(get_db),
+    api_key: str = Security(get_api_key),
 ):
+    if not api_key:
+        authorization_error()
+
     manager_query = db.query(models.Manager).filter(models.Manager.id == id)
     manager = manager_query.first()
 

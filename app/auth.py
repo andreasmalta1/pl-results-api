@@ -25,17 +25,20 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
 
     with contextmanager(get_db)() as db:
         users = db.query(User).all()
-        api_keys = [user.api_key for user in users]
+        api_keys = {user.api_key: user.admin for user in users}
 
     if api_key_header in api_keys:
-        #     return api_keys[api_key_header]
-        return api_key_header
+        return api_keys[api_key_header]
 
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid or missing API Key",
-    )
+    authorization_error()
 
 
 def create_api_key():
     return secrets.token_urlsafe(16)
+
+
+def authorization_error():
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or missing API Key",
+    )
