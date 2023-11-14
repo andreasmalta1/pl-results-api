@@ -5,9 +5,8 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.auth import get_api_key, create_api_key
+from app.auth import create_api_key
 import app.models as models
-import app.schemas as schemas
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(Path(BASE_DIR, "templates")))
@@ -52,28 +51,7 @@ def home_create(
     )
 
 
-# Show API key
 # Forgotten API key -> update
 # Maybe send email as confirmation
 # Hash API key?
 # HTTPS & API Keys
-
-
-# def get_managers(
-#     db: Session = Depends(get_db),
-#     current: bool | None = None,
-#     nation: int | None = None,
-#     team: int | None = None,
-#     api_key: str = Security(get_api_key),
-# ):
-#     managers_query = select(models.Manager).order_by(models.Manager.id)
-#     if current != None:
-#         managers_query = managers_query.filter(models.Manager.current == current)
-
-#     if nation:
-#         managers_query = managers_query.filter(models.Manager.nationality == nation)
-
-#     if team:
-#         managers_query = managers_query.filter(models.Manager.team == team)
-
-#     return paginate(db, managers_query)

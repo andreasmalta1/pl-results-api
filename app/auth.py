@@ -1,14 +1,12 @@
 from fastapi import HTTPException, status, Security
 from fastapi.security import APIKeyHeader
+from contextlib import contextmanager
 import secrets
 
-api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
+from .database import get_db
+from .models import User
 
-API_KEYS = {
-    "9d207bf0-10f5-4d8f-a479-22ff5aeff8d1": True,
-    "f47d4a2c-24cf-4745-937e-620a5963c0b8": False,
-    "b7061546-75e8-444b-a2c4-f19655d07eb8": False,
-}
+api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
 
 
 def get_api_key(api_key_header: str = Security(api_key_header)):
@@ -25,8 +23,13 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
         HTTPException: If the API key is invalid or missing.
     """
 
-    if api_key_header in API_KEYS:
-        return API_KEYS[api_key_header]
+    with contextmanager(get_db)() as db:
+        users = db.query(User).all()
+        api_keys = [user.api_key for user in users]
+
+    if api_key_header in api_keys:
+        #     return api_keys[api_key_header]
+        return api_key_header
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

@@ -1,10 +1,11 @@
-from fastapi import status, APIRouter, Depends, HTTPException, Response
+from fastapi import status, APIRouter, Depends, HTTPException, Response, Security
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.auth import get_api_key
 import app.schemas as schemas
 import app.models as models
 
@@ -69,6 +70,7 @@ def get_managers(
     current: bool | None = None,
     nation: int | None = None,
     team: int | None = None,
+    api_key: str = Security(get_api_key),
 ):
     managers_query = select(models.Manager).order_by(models.Manager.id)
     if current != None:
