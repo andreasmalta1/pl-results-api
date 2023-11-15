@@ -1,12 +1,13 @@
-from fastapi import status, APIRouter, HTTPException, Response, Depends
+from fastapi import status, APIRouter, Depends, HTTPException, Response, Security
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.auth import get_api_key, authorization_error
 from app.database import get_db
-import app.schemas as schemas
 import app.models as models
+import app.schemas as schemas
 
 
 router = APIRouter(prefix="/api/teams", tags=["Teams"])
@@ -20,8 +21,12 @@ router = APIRouter(prefix="/api/teams", tags=["Teams"])
 )
 def create_team(
     team: schemas.TeamCreate,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+
     new_team = models.Team(**team.model_dump())
     db.add(new_team)
     db.commit()
@@ -32,8 +37,9 @@ def create_team(
 
 @router.get("/", response_model=Page[schemas.TeamResponse])
 def get_teams(
-    db: Session = Depends(get_db),
     current: bool | None = None,
+    api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     teams_query = select(models.Team).order_by(models.Team.id)
     if current != None:
@@ -43,7 +49,11 @@ def get_teams(
 
 
 @router.get("/{id}", response_model=schemas.TeamResponse)
-def get_team(id: int, db: Session = Depends(get_db)):
+def get_team(
+    id: int,
+    api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db)
+):
     team = db.query(models.Team).filter(models.Team.id == id).first()
 
     if not team:
@@ -58,8 +68,12 @@ def get_team(id: int, db: Session = Depends(get_db)):
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
 def delete_team(
     id: int,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+
     team_query = db.query(models.Team).filter(models.Team.id == id)
     team = team_query.first()
 
@@ -79,8 +93,12 @@ def delete_team(
 def update_team(
     id: int,
     updated_team: schemas.TeamCreate,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+
     team_query = db.query(models.Team).filter(models.Team.id == id)
     team = team_query.first()
 

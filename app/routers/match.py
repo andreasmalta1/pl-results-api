@@ -1,12 +1,13 @@
-from fastapi import status, APIRouter, HTTPException, Response, Depends
+from fastapi import status, APIRouter, Depends, HTTPException, Response, Security
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
 
+from app.auth import get_api_key, authorization_error
 from app.database import get_db
-import app.schemas as schemas
 import app.models as models
+import app.schemas as schemas
 
 
 router = APIRouter(prefix="/api/matches", tags=["Matches"])
@@ -20,8 +21,12 @@ router = APIRouter(prefix="/api/matches", tags=["Matches"])
 )
 def create_match(
     match: schemas.MatchCreate,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+    
     new_match = models.Match(**match.model_dump())
     home_id = new_match.home_id
     away_id = new_match.away_id
@@ -50,9 +55,10 @@ def create_match(
 
 @router.get("/", response_model=Page[schemas.MatchResponse])
 def get_matches(
-    db: Session = Depends(get_db),
     season: str | None = None,
     team: int | None = None,
+    api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     match_query = select(models.Match).order_by(models.Match.id)
     if season:
@@ -66,7 +72,11 @@ def get_matches(
 
 
 @router.get("/{id}", response_model=schemas.MatchResponse)
-def get_match(id: int, db: Session = Depends(get_db)):
+def get_match(
+    id: int, 
+    api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db)
+):
     match = db.query(models.Match).filter(models.Match.id == id).first()
 
     if not match:
@@ -81,8 +91,12 @@ def get_match(id: int, db: Session = Depends(get_db)):
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
 def delete_match(
     id: int,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+
     match_query = db.query(models.Match).filter(models.Match.id == id)
     match = match_query.first()
 
@@ -102,8 +116,12 @@ def delete_match(
 def update_match(
     id: int,
     updated_match: schemas.MatchCreate,
+    api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
+    if not api_key:
+        authorization_error()
+
     match_query = db.query(models.Match).filter(models.Match.id == id)
     match = match_query.first()
 

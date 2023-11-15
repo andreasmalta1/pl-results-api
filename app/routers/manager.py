@@ -4,10 +4,10 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.database import get_db
 from app.auth import get_api_key, authorization_error
-import app.schemas as schemas
+from app.database import get_db
 import app.models as models
+import app.schemas as schemas
 
 
 router = APIRouter(prefix="/api/managers", tags=["Managers"])
@@ -21,8 +21,8 @@ router = APIRouter(prefix="/api/managers", tags=["Managers"])
 )
 def create_manager(
     manager: schemas.ManagerCreate,
-    db: Session = Depends(get_db),
     api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     if not api_key:
         authorization_error()
@@ -70,11 +70,11 @@ def create_manager(
 
 @router.get("/", response_model=Page[schemas.ManagerResponse])
 def get_managers(
-    db: Session = Depends(get_db),
     current: bool | None = None,
     nation: int | None = None,
     team: int | None = None,
     api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     managers_query = select(models.Manager).order_by(models.Manager.id)
     if current != None:
@@ -92,8 +92,8 @@ def get_managers(
 @router.get("/{id}", response_model=schemas.ManagerResponse)
 def get_manager(
     id: int,
-    db: Session = Depends(get_db),
     api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     manager = db.query(models.Manager).filter(models.Manager.id == id).first()
 
@@ -109,8 +109,8 @@ def get_manager(
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
 def delete_manager(
     id: int,
-    db: Session = Depends(get_db),
     api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     if not api_key:
         authorization_error()
@@ -134,8 +134,8 @@ def delete_manager(
 def update_manager(
     id: int,
     updated_manager: schemas.ManagerCreate,
-    db: Session = Depends(get_db),
     api_key: str = Security(get_api_key),
+    db: Session = Depends(get_db),
 ):
     if not api_key:
         authorization_error()
