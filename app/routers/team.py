@@ -50,9 +50,7 @@ def get_teams(
 
 @router.get("/{id}", response_model=schemas.TeamResponse)
 def get_team(
-    id: int,
-    api_key: str = Security(get_api_key),
-    db: Session = Depends(get_db)
+    id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
     team = db.query(models.Team).filter(models.Team.id == id).first()
 

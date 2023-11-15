@@ -50,8 +50,3 @@ def home_create(
         "index.html", {"request": request, "api_key": api_key}
     )
 
-
-# Forgotten API key -> update
-# Maybe send email as confirmation
-# Hash API key?
-# HTTPS & API Keys

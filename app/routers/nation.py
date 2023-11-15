@@ -46,9 +46,7 @@ def get_nations(
 
 @router.get("/{id}", response_model=schemas.NationResponse)
 def get_nation(
-    id: int,
-    api_key: str = Security(get_api_key),
-    db: Session = Depends(get_db)
+    id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
     nation = db.query(models.Nation).filter(models.Nation.id == id).first()
 

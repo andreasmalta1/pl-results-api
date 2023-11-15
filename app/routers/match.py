@@ -26,7 +26,7 @@ def create_match(
 ):
     if not api_key:
         authorization_error()
-    
+
     new_match = models.Match(**match.model_dump())
     home_id = new_match.home_id
     away_id = new_match.away_id
@@ -73,9 +73,7 @@ def get_matches(
 
 @router.get("/{id}", response_model=schemas.MatchResponse)
 def get_match(
-    id: int, 
-    api_key: str = Security(get_api_key),
-    db: Session = Depends(get_db)
+    id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
     match = db.query(models.Match).filter(models.Match.id == id).first()
 
