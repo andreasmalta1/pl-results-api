@@ -28,6 +28,12 @@ def create_team(
         authorization_error()
 
     new_team = models.Team(**team.model_dump())
+    if db.query(models.Team).filter(models.Team.id == new_team.id).first() is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Team with id {new_team.id} already exists",
+        )
+
     db.add(new_team)
     db.commit()
     db.refresh(new_team)
