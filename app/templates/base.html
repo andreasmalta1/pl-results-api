@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="{{ url_for('static', path='/css/base.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    {% block styles %} {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <a href="#"
+        ><img
+          src="https://github.com/ecemgo/today-i-learned-app/assets/13468728/4f2923ea-9eca-4221-8b18-7198f78fd04e"
+          alt="logo"
+          class="logo"
+      /></a>
+
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+
+      <nav class="navbar">
+        <a href="{{ url_for('home_page') }}" class="nav-item" style="--i: 0"
+          >Premier League</a
+        >
+        <a href="/docs" class="nav-item" style="--i: 1">Premier League</a>
+      </nav>
+    </header>
+
+    <div class="main-content">{% block content %} {% endblock %}</div>
+
+    <!-- <footer class="footer-container">
+      <h3 class="footer-title">Premier League Tables</h3>
+      <ul class="footer-list">
+        <li class="footer-item">
+          <a href="https://bmc.link/andreascal" target="_blank"
+            ><i class="fa-solid fa-mug-hot"></i
+          ></a>
+        </li>
+        <li class="footer-item">
+          <a href="https://twitter.com/andreascalleja" target="_blank"
+            ><i class="fa-brands fa-twitter"></i
+          ></a>
+        </li>
+        <li class="footer-item">
+          <a href="https://github.com/andreasmalta1/pl_table" target="_blank"
+            ><i class="fa-brands fa-github"></i
+          ></a>
+        </li>
+        <li class="footer-item">
+          <a href="https://www.linkedin.com/in/andreascalleja/" target="_blank"
+            ><i class="fa-brands fa-linkedin"></i
+          ></a>
+        </li>
+      </ul>
+      <div class="footer-bottom">
+        <p>
+          Copyright &copy; Andreas Calleja. Designed by
+          <span>Andreas Calleja</span>
+        </p>
+      </div>
+    </footer> -->
+
+    {% block scripts %} {% endblock %}
+  </body>
+</html>
