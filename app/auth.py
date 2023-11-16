@@ -24,13 +24,12 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
     """
 
     with contextmanager(get_db)() as db:
-        users = db.query(User).all()
-        api_keys = {user.api_key: user.admin for user in users}
+        user = db.query(User).filter(User.api_key == api_key_header).first()
 
-    if api_key_header in api_keys:
-        return api_keys[api_key_header]
+    if not user:
+        authorization_error()
 
-    authorization_error()
+    return user.admin
 
 
 def create_api_key():
