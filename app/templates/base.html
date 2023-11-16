@@ -27,7 +27,7 @@
   </head>
   <body>
     <header>
-      <a href="#"
+      <a href="/"
         ><img
           src="https://github.com/ecemgo/today-i-learned-app/assets/13468728/4f2923ea-9eca-4221-8b18-7198f78fd04e"
           alt="logo"
@@ -42,9 +42,12 @@
 
       <nav class="navbar">
         <a href="{{ url_for('home_page') }}" class="nav-item" style="--i: 0"
-          >Premier League</a
+          >Home</a
         >
-        <a href="/docs" class="nav-item" style="--i: 1">Premier League</a>
+        <a href="{{ url_for('register') }}" class="nav-item" style="--i: 1"
+          >Register</a
+        >
+        <a href="/docs" class="nav-item" style="--i: 1">Documentation</a>
       </nav>
     </header>
 

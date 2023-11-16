@@ -23,20 +23,25 @@ def home_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@router.post(path="/new-user", include_in_schema=False)
+@router.get("/register", include_in_schema=False)
+def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
+@router.post("/register", include_in_schema=False)
 async def create_new_user(
     request: Request, email: EmailStr = Form(...), db: Session = Depends(get_db)
 ):
     if not email:
         return templates.TemplateResponse(
-            "index.html", {"request": request, "error": "No email inputted"}
+            "register.html", {"request": request, "error": "No email inputted"}
         )
 
     user = db.query(models.User).filter(models.User.email == email).first()
 
     if user:
         return templates.TemplateResponse(
-            "index.html",
+            "register.html",
             {
                 "request": request,
                 "error": "You are already registered for this service",
@@ -67,11 +72,11 @@ async def create_new_user(
     await send_email(subject, body)
 
     return templates.TemplateResponse(
-        "index.html", {"request": request, "error": "email sent"}
+        "register.html", {"request": request, "error": "email sent"}
     )
 
 
-@router.get("/verifyemail/{token}")
+@router.get("/verifyemail/{token}", include_in_schema=False)
 def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))

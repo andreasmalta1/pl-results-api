@@ -1,30 +1,9 @@
 {% extends "base.html" %} {% block styles%}
-<link href="{{ url_for('static', path='/css/index.css') }}" rel="stylesheet" />
+<link
+  href="{{ url_for('static', path='/css/register.css') }}"
+  rel="stylesheet"
+/>
 {% endblock %} {% block title %} PL Results API {% endblock %} {% block content
 %}
 <h1>Welcome</h1>
-<form action="/new-user" method="post">
-  <label for="email">Enter your email:</label>
-  <input type="email" id="email" name="email" />
-  <button>Generate API KEY</button>
-</form>
-<h1>{{ error }}</h1>
-{% if api_key %}
-<h1>You API Key is: {{ api_key }}.</h1>
-<h2>Please store it and keep it safe</h2>
-{% endif %}
-<button id="forgotten">Forgotten API Key</button>
-
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <form action="/" method="put">
-      <label for="email">Enter your email:</label>
-      <input type="email" id="email" name="email" />
-      <button>Reset API Key</button>
-    </form>
-  </div>
-</div>
-{% endblock %} {% block scripts %}
-<script src="{{ url_for('static', path='/javascript/index.js') }}"></script>
-{% endblock%}
+{% endblock %}
