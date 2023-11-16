@@ -70,8 +70,10 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    api_key = Column(String, nullable=False, unique=True)
+    api_key = Column(String, unique=True)
     admin = Column(Boolean, server_default="False")
+    is_verified = Column(Boolean, server_default="False")
+    verification_code = Column(String, unique=True)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
