@@ -95,6 +95,7 @@ class LastRowResponse(LastRowModel):
 class UserBase(BaseModel):
     email: EmailStr
     admin: bool
+    is_verified: bool
 
 
 class UserCreate(UserBase):
