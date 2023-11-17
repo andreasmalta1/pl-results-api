@@ -1,0 +1,59 @@
+.home-container{
+    margin: auto;
+    width: 40%;
+    background-color: #2b2a2a;
+    text-align: center;
+    border-radius: 20px;
+    color: white;
+}
+
+.home-header{
+    color: #bb86fc;
+    margin-top: 35px;
+    /* margin-bottom: 35px; */
+}
+
+.home-text{
+    padding: 50px;
+}
+
+.home-btn-container{
+    width: 75%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.home-button{
+    font-family: "Poppins", sans-serif;
+    width: 180px;
+    height: 45px;
+    color: #fff;
+    /* padding: 15px 25px; */
+    font-size: 101%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 20px;
+    border: 2px solid #51557e;
+    background: #51557e;
+    margin-bottom: 50px;
+    align-items: center;
+}
+
+.home-button:hover {
+    background: #fff;
+    color: #51557e
+}
+
+
+@media (max-width: 1400px) {
+    .home-container{
+        width: 60%;
+    }
+    
+  }

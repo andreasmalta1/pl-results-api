@@ -8,7 +8,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #1b2430;
+  background: #191919;
   min-height: 100vh;
   margin: 0;
   display: flex;
@@ -27,7 +27,7 @@ body {
   justify-content: space-between;
   align-items: center;
   z-index: 5;
-  background-color: #51557e;
+  background-color: #202020;
 }
 
 .logo {
@@ -80,20 +80,23 @@ body {
 }
 
 .main-content {
-  flex-grow: 1;
   display: flex;
+  flex-direction: column;
+  padding-top: 100px;
   justify-content: center;
   align-items: center;
+  margin: auto;
 }
 
 .footer {
-  background-color: #151515;
+  margin-top: 35px;
+  background-color: #202020;
   padding: 20px 0;
   min-height: 50px;
 }
 
 .footer-container {
-  max-width: 1170px;
+  max-width: 100%;
   margin: auto;
 }
 
@@ -179,10 +182,6 @@ ul {
 .copyright span {
   color: #bb86fc;
 }
-
-/* Group css
-Edit colors
-Add min vh to main section and check why not in middle */
 
 @media (max-width: 900px) {
   .nav-header {
