@@ -1,9 +1,16 @@
 {% extends "base.html" %} {% block styles%}
 <link
-  href="{{ url_for('static', path='/css/register.css') }}"
+  href="{{ url_for('static', path='/css/index.css') }}"
   rel="stylesheet"
 />
 {% endblock %} {% block title %} PL Results API {% endblock %} {% block content
 %}
-<h1>Welcome</h1>
+<div class="home-container">
+  <h1 class="home-header">Premier League Results API</h1>
+  <p class="home-text">Welcome to our Premier League API! We provide access to all results in the Premier League from 1992 until today. Plase check back regulary as this API is regulary updated with new features and more data.</p>
+  <div class="home-btn-container">
+    <button class="home-button">Documentation</button>
+    <button class="home-button">API Key</button>
+  </div>
+</div>
 {% endblock %}
