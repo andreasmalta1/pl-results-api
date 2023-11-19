@@ -16,6 +16,10 @@ body {
   justify-content: space-between;
 }
 
+button {
+  font-family: inherit;
+}
+
 .nav-header {
   min-height: 50px;
   position: fixed;
@@ -250,6 +254,7 @@ ul {
     top: 100%;
     left: 0;
     width: 100%;
+    max-height: 260%;
     height: 0;
     background: rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(50px);
