@@ -23,25 +23,28 @@
   justify-content: space-around;
 }
 
-.home-button {
-  width: 180px;
-  height: 45px;
-  color: #fff;
+.home-link {
   font-size: 101%;
+  width: 180px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   display: inline-block;
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
   outline: none;
   border-radius: 20px;
   border: 2px solid #51557e;
   background: #51557e;
   margin-bottom: 50px;
-  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  padding: 15px;
 }
 
-.home-button:hover {
+.home-link:hover{
   background: #fff;
   color: #51557e;
 }
