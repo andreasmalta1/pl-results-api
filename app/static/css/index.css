@@ -31,9 +31,9 @@
   transition: all 0.3s ease;
   position: relative;
   display: inline-block;
-  display: flex; /* Use flexbox */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: none;
   border-radius: 20px;
   border: 2px solid #51557e;

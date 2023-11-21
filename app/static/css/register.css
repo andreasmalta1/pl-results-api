@@ -12,6 +12,8 @@
 form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .register-container h1 {
@@ -23,13 +25,68 @@ form {
 
 input[type="email"] {
   display: block;
-  text-align: center;
+  color: #fff;
+  text-align: left;
   padding: 12px 20px;
-  margin: 8px auto;
+  margin-top: 50px;
   box-sizing: border-box;
   border: none;
   border-bottom: 2px solid #bb86fc;
   background-color: #2b2a2a;
-  width: 60%;
-  text-align: center;
+  width: 50%;
+}
+
+.generate-btn {
+  font-size: 101%;
+  width: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 20px;
+  border: 2px solid #51557e;
+  background: #51557e;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-decoration: none;
+  color: #fff;
+  padding: 15px;
+}
+
+.generate-btn:hover {
+  background: #fff;
+  color: #51557e;
+}
+
+@media (max-width: 1100px) {
+  .register-container {
+    padding: 0px 50px;
+  }
+
+  .generate-btn,
+  input[type="email"] {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .register-container {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .generate-btn,
+  input[type="email"] {
+    width: 80%;
+  }
+}
+
+@media (max-width: 650px) {
+  .generate-btn,
+  input[type="email"] {
+    width: 95%;
+  }
 }

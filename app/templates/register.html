@@ -9,8 +9,14 @@ block content %}
 <div class="register-container">
   <h1>Register for an API Key</h1>
   <form action="/register" method="post">
-    <input type="email" id="email" name="email" placeholder="Email" />
-    <button>Generate API KEY</button>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      placeholder="Email"
+      autocomplete="off"
+    />
+    <button class="generate-btn">Generate API KEY</button>
   </form>
   <h4>{{ error }}</h4>
   {% if api_key %}
