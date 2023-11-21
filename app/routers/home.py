@@ -95,9 +95,12 @@ def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
     )
 
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Invalid verification code or account already verified",
+        return templates.TemplateResponse(
+            "verify.html",
+            {
+                "request": request,
+                "message": "Invalid verification code or account already verified",
+            },
         )
 
     api_key = create_api_key()
