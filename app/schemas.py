@@ -42,41 +42,6 @@ class MatchResponse(MatchModel):
         from_attributes = True
 
 
-class NationModel(BaseModel):
-    id: int
-    name: str
-
-
-class NationCreate(NationModel):
-    pass
-
-
-class NationResponse(NationModel):
-    class Config:
-        from_attributes = True
-
-
-class ManagerModel(BaseModel):
-    name: str
-    fotmob_id: int
-    nationality: int
-    team: int
-    date_start: date
-    date_end: Optional[date] = None
-    current: bool = False
-
-
-class ManagerCreate(ManagerModel):
-    pass
-
-
-class ManagerResponse(ManagerModel):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-
 class LastRowModel(BaseModel):
     last_row: int
 

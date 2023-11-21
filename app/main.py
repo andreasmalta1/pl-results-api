@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 from pathlib import Path
 
-from app.routers import team, match, nation, manager, home
+from app.routers import team, match, home
 from app.database import Base, engine
 
 
@@ -45,8 +45,6 @@ app.mount(
 )
 app.include_router(team.router)
 app.include_router(match.router)
-app.include_router(nation.router)
-app.include_router(manager.router)
 app.include_router(home.router)
 
 add_pagination(app)
