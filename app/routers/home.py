@@ -34,7 +34,7 @@ async def create_new_user(
 ):
     if not email:
         return templates.TemplateResponse(
-            "register.html", {"request": request, "error": "No email inputted"}
+            "register.html", {"request": request, "message": "No email inputted"}
         )
 
     user = db.query(models.User).filter(models.User.email == email).first()
@@ -44,7 +44,7 @@ async def create_new_user(
             "register.html",
             {
                 "request": request,
-                "error": "You are already registered for this service",
+                "message": "You are already registered for this service",
             },
         )
 
@@ -66,13 +66,19 @@ async def create_new_user(
 
     url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/verifyemail/{token.hex()}"
     subject = "PL Results API Registration"
-    body = f"""Welcome to the PL Results API. Please follow the link belowto active your account and receive your API Key. Please store your key in a safe and secure place
-            <a href="{url}">Click here!</a>
+    body = f"""<h1>Welcome to the PL Results API.</h1>
+                <p>Please follow the link below to activate your account and receive your API Key.</p>
+                <p>Please store your key in a safe and secure place</p>
+                <p><a href="{url}">Click here!</a></p>
         """
     await send_email(subject, body)
 
     return templates.TemplateResponse(
-        "register.html", {"request": request, "error": "email sent"}
+        "register.html",
+        {
+            "request": request,
+            "message": "An email has been sent to the provided address.",
+        },
     )
 
 
@@ -102,5 +108,5 @@ def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
     db.commit()
 
     return templates.TemplateResponse(
-        "index.html", {"request": request, "api_key": api_key}
+        "verify.html", {"request": request, "api_key": api_key}
     )

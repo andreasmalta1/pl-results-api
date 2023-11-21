@@ -15,28 +15,19 @@ block content %}
       name="email"
       placeholder="Email"
       autocomplete="off"
+      required
     />
     <button class="generate-btn">Generate API KEY</button>
   </form>
-  <h4 class="error-msg">{{ error }}</h4>
+  <div id="messages">
+    <h4 class="message">{{ message }}</h4>
+  </div>
   {% if api_key %}
   <h1>You API Key is: {{ api_key }}.</h1>
   <h2>Please store it and keep it safe</h2>
   {% endif %}
 </div>
 
-<!-- <button id="forgotten">Forgotten API Key</button> -->
-
-<!-- <div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <form action="/" method="put">
-      <label for="email">Enter your email:</label>
-      <input type="email" id="email" name="email" />
-      <button>Reset API Key</button>
-    </form>
-  </div>
-</div> -->
 {% endblock %} {% block scripts %}
-<script src="{{ url_for('static', path='/javascript/index.js') }}"></script>
+<script src="{{ url_for('static', path='/javascript/register.js') }}"></script>
 {% endblock%}
