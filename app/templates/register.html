@@ -6,8 +6,8 @@
 {% endblock %} {% block title %} PL Results API | Register {% endblock %} {%
 block content %}
 
-<div class="register-container">
-  <h1>Register for an API Key</h1>
+<div class="main-container">
+  <h1 class="main-header">Register for an API Key</h1>
   <form action="/register" method="post">
     <input
       type="email"
@@ -17,7 +17,7 @@ block content %}
       autocomplete="off"
       required
     />
-    <button class="generate-btn">Generate API KEY</button>
+    <button class="link-btn generate-btn">Generate API KEY</button>
   </form>
   <div id="messages">
     <h4 class="message">{{ message }}</h4>

@@ -1,24 +1,6 @@
-.register-container {
-  margin: auto;
-  width: 40%;
-  background-color: #2b2a2a;
-  text-align: center;
-  border-radius: 20px;
-  color: white;
-  justify-content: center;
-  align-items: center;
-}
-
 form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.register-container h1 {
-  color: #bb86fc;
-  margin-top: 35px;
   justify-content: center;
   align-items: center;
 }
@@ -38,26 +20,7 @@ input[type="email"] {
 
 .generate-btn {
   font-size: 101%;
-  width: 50%;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-  outline: none;
-  border-radius: 20px;
-  border: 2px solid #51557e;
-  background: #51557e;
   margin-top: 50px;
-  margin-bottom: 50px;
-  text-decoration: none;
-  color: #fff;
-  padding: 15px;
-}
-
-.generate-btn:hover {
-  background: #fff;
-  color: #51557e;
 }
 
 .message {
@@ -65,19 +28,9 @@ input[type="email"] {
 }
 
 @media (max-width: 1100px) {
-  .register-container {
-    padding: 0px 50px;
-  }
-
   .generate-btn,
   input[type="email"] {
     width: 80%;
-  }
-}
-
-@media (max-width: 1100px) {
-  .register-container {
-    width: 60%;
   }
 }
 
