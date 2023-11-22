@@ -110,6 +110,33 @@ button {
   margin-top: 35px;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type="email"],
+input[type="text"],
+textarea {
+  font: inherit;
+  display: block;
+  color: #fff;
+  text-align: left;
+  padding: 12px 20px;
+  margin-top: 50px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid #bb86fc;
+  background-color: #2b2a2a;
+  width: 50%;
+}
+
+.message {
+  margin-bottom: 35px;
+}
+
 .link-btn {
   font-size: 101%;
   font-weight: bold;

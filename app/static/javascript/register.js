@@ -1,9 +1,9 @@
 const inputBtn = document.querySelector(".generate-btn")
 const emailEl = document.querySelector("#email")
-const messagesEl = document.querySelector("#error-msgs")
+const messagesEl = document.querySelector("#messages")
 
 inputBtn.addEventListener("click", function (e) {
-  errorsEl.innerHTML = ""
+  messagesEl.innerHTML = ""
   if (!emailEl.value) {
     e.preventDefault()
     const messageEl = document.createElement("h4")

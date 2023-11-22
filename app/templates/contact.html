@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block styles%}
+<link
+  href="{{ url_for('static', path='/css/contact.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block title %} PL Results API | Register {% endblock %} {%
+block content %}
+
+<div class="main-container">
+  <h1 class="main-header">Contact</h1>
+  <form action="/contact" method="post">
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Name"
+      autocomplete="off"
+      required
+    />
+    <input
+      type="email"
+      id="email"
+      name="email"
+      placeholder="Email"
+      autocomplete="off"
+      required
+    />
+    <textarea
+      id="message-text"
+      name="message"
+      rows="4"
+      cols="50"
+      placeholder="Enter your message"
+    ></textarea>
+    <button class="link-btn send-btn">Send Message</button>
+  </form>
+  <div id="messages">
+    <h4 class="message">{{ message }}</h4>
+  </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', path='/javascript/contact.js') }}"></script>
+{% endblock%}

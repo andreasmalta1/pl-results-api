@@ -1,4 +1,4 @@
-from fastapi import status, APIRouter, Depends, Form, HTTPException, Request
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.templating import Jinja2Templates
 from pydantic import EmailStr
 from pathlib import Path

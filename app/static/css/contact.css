@@ -1,0 +1,15 @@
+input[type="email"],
+input[type="text"],
+textarea {
+  width: 75%;
+  margin-bottom: 50px;
+}
+
+input[type="text"] {
+  margin-bottom: 25px;
+}
+
+textarea {
+  border: 2px solid #bb86fc;
+  border-radius: 5px;
+}
