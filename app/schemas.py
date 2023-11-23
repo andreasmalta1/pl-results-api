@@ -1,8 +1,6 @@
-import os
 from pydantic import BaseModel, Field, EmailStr
 from datetime import date
 from typing import Optional
-from contextlib import contextmanager
 
 
 class TeamModel(BaseModel):
@@ -21,7 +19,7 @@ class TeamResponse(TeamModel):
         from_attributes = True
 
 
-class MatchModel(BaseModel):
+class MatchCreate(BaseModel):
     home_id: int
     home_score: int
     away_id: int
@@ -30,12 +28,14 @@ class MatchModel(BaseModel):
     season: Optional[str] = Field(min_length=9, max_length=9, default=None)
 
 
-class MatchCreate(MatchModel):
-    pass
-
-
-class MatchResponse(MatchModel):
+class MatchResponse(BaseModel):
     id: int
+    home_team: Optional[TeamResponse]
+    home_score: int
+    away_team: Optional[TeamResponse]
+    away_score: int
+    match_date: Optional[date] = date.today()
+    season: Optional[str] = Field(min_length=9, max_length=9, default=None)
 
     class Config:
         from_attributes = True

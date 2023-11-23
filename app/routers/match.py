@@ -2,11 +2,11 @@ from fastapi import status, APIRouter, Depends, HTTPException, Response, Securit
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from datetime import date
 
 from app.auth import get_api_key, authorization_error
-from app.database import get_db
+from app.database import get_db, engine
 import app.models as models
 import app.schemas as schemas
 
@@ -67,7 +67,15 @@ def get_matches(
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
-    match_query = select(models.Match).order_by(models.Match.id)
+    home_team_alias = aliased(models.Team)
+    away_team_alias = aliased(models.Team)
+
+    match_query = (
+        select(models.Match)
+        .join(home_team_alias, models.Match.home_team)
+        .join(away_team_alias, models.Match.away_team)
+        .order_by(models.Match.id)
+    )
     if season:
         match_query = match_query.filter(models.Match.season == season)
     if team:
@@ -86,13 +94,28 @@ def get_matches(
 def get_match(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
-    match = db.query(models.Match).filter(models.Match.id == id).first()
+    home_team_alias = aliased(models.Team)
+    away_team_alias = aliased(models.Team)
+
+    match_query = (
+        select(models.Match, home_team_alias, away_team_alias)
+        .join(home_team_alias, models.Match.home_team)
+        .join(away_team_alias, models.Match.away_team)
+        .filter(models.Match.id == id)
+    )
+
+    match = db.execute(match_query).fetchone()
 
     if not match:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Match with id {id} was not found",
         )
+
+    match_info, home_team, away_team = match
+    match = dict(
+        match_info.__dict__, home_team=home_team.__dict__, away_team=away_team.__dict__
+    )
 
     return match
 

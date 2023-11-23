@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP, DATE
 
@@ -33,6 +34,9 @@ class Match(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
+
+    home_team = relationship("Team", foreign_keys=[home_id])
+    away_team = relationship("Team", foreign_keys=[away_id])
 
 
 class LastRow(Base):
