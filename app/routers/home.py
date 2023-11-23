@@ -65,7 +65,7 @@ async def create_new_user(
     db.refresh(new_user)
 
     url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/verifyemail/{token.hex()}"
-    subject = "PL Results API Registration"
+    subject = "PL Results - Account Registration"
     body = f"""<h1>Welcome to the PL Results API.</h1>
                 <p>Please follow the link below to activate your account and receive your API Key.</p>
                 <p>Please store your key in a safe and secure place</p>
@@ -112,4 +112,58 @@ def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
 
     return templates.TemplateResponse(
         "verify.html", {"request": request, "api_key": api_key}
+    )
+
+
+@router.get("/forgotten", include_in_schema=False)
+def forgotten(request: Request):
+    return templates.TemplateResponse("forgotten.html", {"request": request})
+
+
+@router.post("/forgotten", include_in_schema=False)
+async def reset_api_key(
+    request: Request, email: EmailStr = Form(...), db: Session = Depends(get_db)
+):
+    if not email:
+        return templates.TemplateResponse(
+            "register.html", {"request": request, "message": "No email inputted"}
+        )
+
+    user = db.query(models.User).filter(models.User.email == email).first()
+
+    if not user:
+        return templates.TemplateResponse(
+            "register.html",
+            {
+                "request": request,
+                "message": "You are not registered. Please register to get your API Key",
+            },
+        )
+
+    token = randbytes(10)
+    hashedCode = hashlib.sha256()
+    hashedCode.update(token)
+    verification_code = hashedCode.hexdigest()
+
+    user.is_verified = False
+    user.verification_code = verification_code
+    user.api_key = None
+
+    db.commit()
+
+    url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/verifyemail/{token.hex()}"
+    subject = "PL Results - Reset API Key"
+    body = f"""<h1>API Key Reset</h1>
+                <p>Please follow the link below to to reset your API Key.</p>
+                <p>Please store your key in a safe and secure place</p>
+                <p><a href="{url}">Click here!</a></p>
+        """
+    await send_email(subject, body)
+
+    return templates.TemplateResponse(
+        "forgotten.html",
+        {
+            "request": request,
+            "message": "An email has been sent with the reset instructions.",
+        },
     )

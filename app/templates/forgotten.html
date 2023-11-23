@@ -7,8 +7,8 @@
 block content %}
 
 <div class="main-container">
-  <h1 class="main-header">Register for an API Key</h1>
-  <form action="{{ url_for('register')}}" method="post">
+  <h1 class="main-header">Reset API Key</h1>
+  <form action="{{ url_for('forgotten')}}" method="post">
     <input
       type="email"
       id="email"
@@ -17,13 +17,10 @@ block content %}
       autocomplete="off"
       required
     />
-    <button class="link-btn generate-btn">Generate API KEY</button>
+    <button class="link-btn generate-btn">Reset API KEY</button>
   </form>
   <div id="messages">
     <h4 class="message">{{ message }}</h4>
-  </div>
-  <div class="forgotten">
-    <a href="{{ url_for('forgotten')}}">Forgotten API Key?</a>
   </div>
 </div>
 

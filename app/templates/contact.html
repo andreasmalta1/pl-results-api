@@ -9,7 +9,7 @@ block content %}
 <div class="container">
   <div class="left main-container">
     <h1 class="main-header">Contact</h1>
-    <form action="/contact" method="post">
+    <form action="{{ url_for('contact')}}" method="post">
       <input
         type="text"
         id="name"
