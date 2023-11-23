@@ -47,6 +47,10 @@ def create_match(
             detail=f"Away team with id {away_id} was not found",
         )
 
+    if not new_match.season:
+        current_season = db.query(models.Season).first().season
+        new_match.season = current_season
+
     db.add(new_match)
     db.commit()
     db.refresh(new_match)

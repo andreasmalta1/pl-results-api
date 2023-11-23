@@ -2,6 +2,7 @@ import os
 from pydantic import BaseModel, Field, EmailStr
 from datetime import date
 from typing import Optional
+from contextlib import contextmanager
 
 
 class TeamModel(BaseModel):
@@ -26,9 +27,7 @@ class MatchModel(BaseModel):
     away_id: int
     away_score: int
     match_date: Optional[date] = date.today()
-    season: Optional[str] = Field(
-        min_length=9, max_length=9, default=os.getenv("CURRENT_SEASON")
-    )
+    season: Optional[str] = Field(min_length=9, max_length=9, default=None)
 
 
 class MatchCreate(MatchModel):
