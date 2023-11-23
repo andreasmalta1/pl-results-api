@@ -1,9 +1,12 @@
 import os
+import sys
 import pandas as pd
 from contextlib import contextmanager
 
-from database import get_db
-from models import Team, Match, LastRow, Season
+sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
+
+from app.database import get_db
+from app.models import Team, Match, LastRow, Season
 
 
 def get_last_row():
@@ -13,10 +16,9 @@ def get_last_row():
 
 
 def set_last_row(last_row):
-    last_row_dict = {"last_row": last_row}
     with contextmanager(get_db)() as db:
-        row_query = db.query(LastRow).filter(LastRow.id == 1)
-        row_query.update(last_row_dict, synchronize_session=False)
+        last_row = db.query(LastRow).filter(LastRow.id == 1).first()
+        last_row.last_row = last_row
         db.commit()
 
 

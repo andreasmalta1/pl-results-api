@@ -1,11 +1,14 @@
 import os
+import sys
 import csv
 import requests
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
 
-from database import get_db
-from models import Team, Match, LastRow, Season
+sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
+
+from app.database import get_db
+from app.models import Team, Match, LastRow, Season
 
 
 def set_details():
