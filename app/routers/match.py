@@ -3,6 +3,7 @@ from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
+from datetime import date
 
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
@@ -56,6 +57,8 @@ def create_match(
 @router.get("/", response_model=Page[schemas.MatchResponse])
 def get_matches(
     season: str | None = None,
+    date_start: date | None = None,
+    date_end: date | None = None,
     team: int | None = None,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
@@ -66,6 +69,10 @@ def get_matches(
     if team:
         match_query = match_query.filter(
             or_(models.Match.home_id == team, models.Match.away_id == team)
+        )
+    if date_start and date_end:
+        match_query = match_query.filter(
+            models.Match.match_date >= date_start, models.Match.match_date <= date_end
         )
 
     return paginate(db, match_query)

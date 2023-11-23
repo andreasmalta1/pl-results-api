@@ -1,3 +1,0 @@
-Primary text = bb86fc
-secondary text = 03dac5
-highlight text = 3700b3
