@@ -9,7 +9,7 @@ from models import Team, Match, LastRow, Season
 
 
 def set_details():
-    last_row_dict = {"last_row": 0}
+    last_row_dict = {"last_row": -1}
     season_dict = {"season": "2023/2024"}
 
     last_row_obj = LastRow(**last_row_dict)
