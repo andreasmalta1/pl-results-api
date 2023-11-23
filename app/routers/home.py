@@ -10,7 +10,7 @@ import hashlib
 from app.database import get_db
 from app.auth import create_api_key
 from app.send_email import send_email
-import app.models as models
+from app.models import User
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(Path(BASE_DIR, "templates")))
@@ -37,7 +37,7 @@ async def create_new_user(
             "register.html", {"request": request, "message": "No email inputted"}
         )
 
-    user = db.query(models.User).filter(models.User.email == email).first()
+    user = db.query(User).filter(User.email == email).first()
 
     if user:
         return templates.TemplateResponse(
@@ -53,7 +53,7 @@ async def create_new_user(
     hashedCode.update(token)
     verification_code = hashedCode.hexdigest()
 
-    new_user = models.User(
+    new_user = User(
         email=email,
         api_key=None,
         admin=False,
@@ -88,11 +88,7 @@ def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
 
-    user = (
-        db.query(models.User)
-        .filter(models.User.verification_code == verification_code)
-        .first()
-    )
+    user = db.query(User).filter(User.verification_code == verification_code).first()
 
     if not user:
         return templates.TemplateResponse(
@@ -129,7 +125,7 @@ async def reset_api_key(
             "register.html", {"request": request, "message": "No email inputted"}
         )
 
-    user = db.query(models.User).filter(models.User.email == email).first()
+    user = db.query(User).filter(User.email == email).first()
 
     if not user:
         return templates.TemplateResponse(

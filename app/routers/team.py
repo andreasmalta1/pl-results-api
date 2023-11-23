@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
-import app.models as models
+from app.models import Team
 import app.schemas as schemas
 
 
@@ -27,8 +27,8 @@ def create_team(
     if not api_key:
         authorization_error()
 
-    new_team = models.Team(**team.model_dump())
-    if db.query(models.Team).filter(models.Team.id == new_team.id).first() is not None:
+    new_team = Team(**team.model_dump())
+    if db.query(Team).filter(Team.id == new_team.id).first() is not None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Team with id {new_team.id} already exists",
@@ -47,9 +47,9 @@ def get_teams(
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
-    teams_query = select(models.Team).order_by(models.Team.id)
+    teams_query = select(Team).order_by(Team.id)
     if current != None:
-        teams_query = teams_query.filter(models.Team.current_team == current)
+        teams_query = teams_query.filter(Team.current_team == current)
 
     return paginate(db, teams_query)
 
@@ -58,7 +58,7 @@ def get_teams(
 def get_team(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
-    team = db.query(models.Team).filter(models.Team.id == id).first()
+    team = db.query(Team).filter(Team.id == id).first()
 
     if not team:
         raise HTTPException(
@@ -78,7 +78,7 @@ def delete_team(
     if not api_key:
         authorization_error()
 
-    team_query = db.query(models.Team).filter(models.Team.id == id)
+    team_query = db.query(Team).filter(Team.id == id)
     team = team_query.first()
 
     if team == None:
@@ -103,7 +103,7 @@ def update_team(
     if not api_key:
         authorization_error()
 
-    team_query = db.query(models.Team).filter(models.Team.id == id)
+    team_query = db.query(Team).filter(Team.id == id)
     team = team_query.first()
 
     if team == None:

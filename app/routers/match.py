@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session, aliased
 from datetime import date
 
 from app.auth import get_api_key, authorization_error
-from app.database import get_db, engine
-import app.models as models
+from app.database import get_db
+from app.models import Match, Team, Season
 import app.schemas as schemas
 
 
@@ -28,12 +28,12 @@ def create_match(
     if not api_key:
         authorization_error()
 
-    new_match = models.Match(**match.model_dump())
+    new_match = Match(**match.model_dump())
     home_id = new_match.home_id
     away_id = new_match.away_id
 
-    home_team = db.query(models.Team).filter(models.Team.id == home_id).first()
-    away_team = db.query(models.Team).filter(models.Team.id == away_id).first()
+    home_team = db.query(Team).filter(Team.id == home_id).first()
+    away_team = db.query(Team).filter(Team.id == away_id).first()
 
     if not home_team:
         raise HTTPException(
@@ -48,7 +48,7 @@ def create_match(
         )
 
     if not new_match.season:
-        current_season = db.query(models.Season).first().season
+        current_season = db.query(Season).first().season
         new_match.season = current_season
 
     db.add(new_match)
@@ -67,24 +67,24 @@ def get_matches(
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
-    home_team_alias = aliased(models.Team)
-    away_team_alias = aliased(models.Team)
+    home_team_alias = aliased(Team)
+    away_team_alias = aliased(Team)
 
     match_query = (
-        select(models.Match)
-        .join(home_team_alias, models.Match.home_team)
-        .join(away_team_alias, models.Match.away_team)
-        .order_by(models.Match.id)
+        select(Match)
+        .join(home_team_alias, Match.home_team)
+        .join(away_team_alias, Match.away_team)
+        .order_by(Match.id)
     )
     if season:
-        match_query = match_query.filter(models.Match.season == season)
+        match_query = match_query.filter(Match.season == season)
     if team:
         match_query = match_query.filter(
-            or_(models.Match.home_id == team, models.Match.away_id == team)
+            or_(Match.home_id == team, Match.away_id == team)
         )
     if date_start and date_end:
         match_query = match_query.filter(
-            models.Match.match_date >= date_start, models.Match.match_date <= date_end
+            Match.match_date >= date_start, Match.match_date <= date_end
         )
 
     return paginate(db, match_query)
@@ -94,14 +94,14 @@ def get_matches(
 def get_match(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
-    home_team_alias = aliased(models.Team)
-    away_team_alias = aliased(models.Team)
+    home_team_alias = aliased(Team)
+    away_team_alias = aliased(Team)
 
     match_query = (
-        select(models.Match, home_team_alias, away_team_alias)
-        .join(home_team_alias, models.Match.home_team)
-        .join(away_team_alias, models.Match.away_team)
-        .filter(models.Match.id == id)
+        select(Match, home_team_alias, away_team_alias)
+        .join(home_team_alias, Match.home_team)
+        .join(away_team_alias, Match.away_team)
+        .filter(Match.id == id)
     )
 
     match = db.execute(match_query).fetchone()
@@ -129,7 +129,7 @@ def delete_match(
     if not api_key:
         authorization_error()
 
-    match_query = db.query(models.Match).filter(models.Match.id == id)
+    match_query = db.query(Match).filter(Match.id == id)
     match = match_query.first()
 
     if match == None:
@@ -154,7 +154,7 @@ def update_match(
     if not api_key:
         authorization_error()
 
-    match_query = db.query(models.Match).filter(models.Match.id == id)
+    match_query = db.query(Match).filter(Match.id == id)
     match = match_query.first()
 
     if match == None:
@@ -167,8 +167,8 @@ def update_match(
     home_id = updated_match.get("home_id")
     away_id = updated_match.get("away_id")
 
-    home_team = db.query(models.Team).filter(models.Team.id == home_id).first()
-    away_team = db.query(models.Team).filter(models.Team.id == away_id).first()
+    home_team = db.query(Team).filter(Team.id == home_id).first()
+    away_team = db.query(Team).filter(Team.id == away_id).first()
 
     if not home_team:
         raise HTTPException(
