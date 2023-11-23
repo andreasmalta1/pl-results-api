@@ -1,3 +1,30 @@
+.container {
+  width: 90%;
+  display: flex;
+  align-items: stretch;
+}
+
+.left,
+.right {
+  margin: 30px 40px;
+}
+
+.right {
+  padding: 0px 50px;
+}
+
+.info {
+  text-align: left;
+}
+
+h2 {
+  display: inline;
+}
+
+.card {
+  margin-top: 35px;
+}
+
 input[type="email"],
 input[type="text"],
 textarea {
@@ -12,4 +39,46 @@ input[type="text"] {
 textarea {
   border: 2px solid #bb86fc;
   border-radius: 5px;
+}
+
+.socials {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.brand-icon {
+  color: white;
+  font-size: 150%;
+  margin: 0 15px;
+}
+
+.beer {
+  margin-top: 80px;
+}
+
+.bmc-btn {
+  width: 60%;
+  font-size: 105% !important;
+  margin: auto;
+}
+
+.bmc-btn-text {
+  font-family: "Poppins", sans-serif;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .left,
+  .right {
+    width: 80%;
+  }
+
+  .bmc-btn {
+    margin-bottom: 35px;
+  }
 }

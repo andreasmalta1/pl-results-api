@@ -43,12 +43,12 @@ async def contact_form(
         )
 
     subject = "PL Results API - New Message"
-    #     body = f"""<h1>Welcome to the PL Results API.</h1>
-    #                 <p>Please follow the link below to activate your account and receive your API Key.</p>
-    #                 <p>Please store your key in a safe and secure place</p>
-    #                 <p><a href="{url}">Click here!</a></p>
-    #         """
-    #     await send_email(subject, body)
+    body = f"""<h1>New Message From PL Results API</h1>
+                <h3>Name: {name}</h3>
+                <h3>Email: {email}</h3>
+                <br>
+                <p>{message}</p>"""
+    await send_email(subject, body)
 
     return templates.TemplateResponse(
         "contact.html", {"request": request, "message": "Your email has been sent"}
