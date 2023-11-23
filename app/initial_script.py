@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from contextlib import contextmanager
 
 from database import get_db
-from models import Team, LastRow, Season
+from models import Team, Match, LastRow, Season
 
 
 def set_details():
@@ -66,30 +66,30 @@ def get_pl_matches():
             date = None
 
             for row in rows:
-                match_obj = {}
+                match_dict = {}
                 cells = row.find_all("td")
                 if cells[0].get_text():
                     date = cells[0].get_text()
-
                 home_team = cells[2].get_text().strip()
                 home_team = next(
                     team for team in list_teams if team["name"] == home_team
                 )
                 home_id = home_team["id"]
 
-                away_team = cells[2].get_text().strip()
+                away_team = cells[4].get_text().strip()
                 away_team = next(
                     team for team in list_teams if team["name"] == away_team
                 )
                 away_id = away_team["id"]
                 score = cells[-2].get_text().strip().split()[0].split(":")
 
-                match_obj["home_id"] = home_id
-                match_obj["home_score"] = score[0]
-                match_obj["away_id"] = away_id
-                match_obj["away_score"] = score[1]
-                match_obj["match_date"] = date
-                match_obj["season"] = f"{year}/{year+1}"
+                match_dict["home_id"] = home_id
+                match_dict["home_score"] = score[0]
+                match_dict["away_id"] = away_id
+                match_dict["away_score"] = score[1]
+                match_dict["match_date"] = date
+                match_dict["season"] = f"{year}/{year+1}"
+                match_obj = Match(**match_dict)
                 list_matches.append(match_obj)
 
     with contextmanager(get_db)() as db:
@@ -98,8 +98,8 @@ def get_pl_matches():
 
 
 def main():
-    # set_details()
-    # create_teams()
+    set_details()
+    create_teams()
     get_pl_matches()
 
 
