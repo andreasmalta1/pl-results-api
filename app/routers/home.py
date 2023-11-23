@@ -9,7 +9,7 @@ import hashlib
 
 from app.database import get_db
 from app.auth import create_api_key
-from app.email import send_email
+from app.send_email import send_email
 import app.models as models
 
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 
 from app.database import get_db
-from app.email import send_email
+from app.send_email import send_email
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(Path(BASE_DIR, "templates")))
