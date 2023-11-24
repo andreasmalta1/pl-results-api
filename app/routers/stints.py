@@ -85,7 +85,7 @@ def get_stints(
     if manager:
         stints_query = stints_query.filter(Stints.manager_id == manager)
     if team:
-        stints_query = stints_query.filter(Stints.team_id == manager)
+        stints_query = stints_query.filter(Stints.team_id == team)
     if date_start and date_end:
         stints_query = stints_query.filter(
             Stints.match_date >= date_start, Stints.match_date <= date_end
