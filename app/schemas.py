@@ -58,15 +58,15 @@ class NationResponse(NationModel):
 
 class ManagerModel(BaseModel):
     name: str
-    nation_id: int
 
 
 class ManagerCreate(ManagerModel):
-    pass
+    nation_id: int
 
 
 class ManagerResponse(ManagerModel):
     id: int
+    nation: Optional[NationResponse]
 
     class Config:
         from_attributes = True

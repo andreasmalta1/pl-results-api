@@ -59,6 +59,8 @@ class Manager(Base):
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
 
+    nation = relationship("Nation", foreign_keys=[nation_id])
+
 
 class Stints(Base):
     __tablename__ = "stints"
