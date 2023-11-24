@@ -41,33 +41,36 @@ class MatchResponse(BaseModel):
         from_attributes = True
 
 
-class LastRowModel(BaseModel):
-    last_row: int
+class NationModel(BaseModel):
+    id: int
+    name: str
 
 
-class LastRowCreate(LastRowModel):
+class NationCreate(NationModel):
     pass
 
 
-class LastRowResponse(LastRowModel):
-    id: int
-
+class NationResponse(NationModel):
     class Config:
         from_attributes = True
 
 
-class UserBase(BaseModel):
-    email: EmailStr
-    admin: bool
-    is_verified: bool
+class ManagerModel(BaseModel):
+    name: str
+    # fotmob_id: int
+    nationality: int
+    team: int
+    # date_start: date
+    # date_end: Optional[date] = None
+    current: bool = False
 
 
-class UserCreate(UserBase):
-    password: str
-
-
-class UserResponse(UserBase):
+class ManagerCreate(ManagerModel):
     pass
+
+
+class ManagerResponse(ManagerModel):
+    id: int
 
     class Config:
         from_attributes = True

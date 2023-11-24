@@ -39,11 +39,53 @@ class Match(Base):
     away_team = relationship("Team", foreign_keys=[away_id])
 
 
+class Nation(Base):
+    __tablename__ = "nations"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+
+class Manager(Base):
+    __tablename__ = "managers"
+
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    name = Column(String, nullable=False)
+    nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
+    team = Column(Integer, ForeignKey("teams.id"), nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+
+class ManagerStints(Base):
+    __tablename__ = "managerialstints"
+
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    manager_id = Column(Integer, ForeignKey("managers.id"), nullable=False)
+    date_start = Column(DATE, nullable=False)
+    date_end = Column(DATE)
+    current = Column(Boolean, server_default="False")
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+
 class LastRow(Base):
     __tablename__ = "lastrow"
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     last_row = Column(Integer, primary_key=True, nullable=False)
+
+
+class Season(Base):
+    __tablename__ = "season"
+
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    season = Column(String(9), nullable=False)
 
 
 class User(Base):
@@ -58,10 +100,3 @@ class User(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
-
-
-class Season(Base):
-    __tablename__ = "season"
-
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    season = Column(String(9), nullable=False)
