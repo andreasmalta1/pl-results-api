@@ -73,19 +73,20 @@ class ManagerResponse(ManagerModel):
 
 
 class StintsModel(BaseModel):
-    manager_id: int
-    team_id: int
     date_start: date
     date_end: Optional[date] = None
     current: bool = False
 
 
 class StintsCreate(StintsModel):
-    pass
+    manager_id: int
+    team_id: int
 
 
 class StintsResponse(StintsModel):
     id: int
+    manager: Optional[ManagerResponse]
+    team: Optional[TeamResponse]
 
     class Config:
         from_attributes = True

@@ -75,6 +75,9 @@ class Stints(Base):
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
 
+    manager = relationship("Manager", foreign_keys=[manager_id])
+    team = relationship("Team", foreign_keys=[team_id])
+
 
 class LastRow(Base):
     __tablename__ = "lastrow"
