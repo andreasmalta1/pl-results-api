@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
 from app.models import Nation, Manager
-import app.schemas as schemas
+from app.schemas import ManagerCreate, ManagerResponse
 
 
 router = APIRouter(prefix="/api/managers", tags=["Managers"])
@@ -16,11 +16,11 @@ router = APIRouter(prefix="/api/managers", tags=["Managers"])
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=schemas.ManagerResponse,
+    response_model=ManagerResponse,
     include_in_schema=False,
 )
 def create_manager(
-    manager: schemas.ManagerCreate,
+    manager: ManagerCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
@@ -45,7 +45,7 @@ def create_manager(
     return new_manager
 
 
-@router.get("/", response_model=Page[schemas.ManagerResponse])
+@router.get("/", response_model=Page[ManagerResponse])
 def get_managers(
     nation: int | None = None,
     api_key: str = Security(get_api_key),
@@ -58,7 +58,7 @@ def get_managers(
     return paginate(db, managers_query)
 
 
-@router.get("/{id}", response_model=schemas.ManagerResponse)
+@router.get("/{id}", response_model=ManagerResponse)
 def get_manager(
     id: int,
     api_key: str = Security(get_api_key),
@@ -99,10 +99,10 @@ def delete_manager(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}", response_model=schemas.ManagerResponse, include_in_schema=False)
+@router.put("/{id}", response_model=ManagerResponse, include_in_schema=False)
 def update_manager(
     id: int,
-    updated_manager: schemas.ManagerCreate,
+    updated_manager: ManagerCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
 from app.models import Nation
-import app.schemas as schemas
+from app.schemas import NationCreate, NationResponse
 
 
 router = APIRouter(prefix="/api/nations", tags=["Nations"])
@@ -16,11 +16,11 @@ router = APIRouter(prefix="/api/nations", tags=["Nations"])
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=schemas.NationResponse,
+    response_model=NationResponse,
     include_in_schema=False,
 )
 def create_nation(
-    nation: schemas.NationCreate,
+    nation: NationCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
@@ -35,7 +35,7 @@ def create_nation(
     return new_nation
 
 
-@router.get("/", response_model=Page[schemas.NationResponse])
+@router.get("/", response_model=Page[NationResponse])
 def get_nations(
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
@@ -44,7 +44,7 @@ def get_nations(
     return paginate(db, nation_query)
 
 
-@router.get("/{id}", response_model=schemas.NationResponse)
+@router.get("/{id}", response_model=NationResponse)
 def get_nation(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
@@ -83,10 +83,10 @@ def delete_nation(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}", response_model=schemas.NationResponse, include_in_schema=False)
+@router.put("/{id}", response_model=NationResponse, include_in_schema=False)
 def update_nation(
     id: int,
-    updated_nation: schemas.NationCreate,
+    updated_nation: NationCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):

@@ -8,7 +8,7 @@ from datetime import date
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
 from app.models import Match, Team, Season
-import app.schemas as schemas
+from app.schemas import MatchCreate, MatchResponse
 
 
 router = APIRouter(prefix="/api/matches", tags=["Matches"])
@@ -17,11 +17,11 @@ router = APIRouter(prefix="/api/matches", tags=["Matches"])
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=schemas.MatchResponse,
+    response_model=MatchResponse,
     include_in_schema=False,
 )
 def create_match(
-    match: schemas.MatchCreate,
+    match: MatchCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
@@ -58,7 +58,7 @@ def create_match(
     return new_match
 
 
-@router.get("/", response_model=Page[schemas.MatchResponse])
+@router.get("/", response_model=Page[MatchResponse])
 def get_matches(
     season: str | None = None,
     date_start: date | None = None,
@@ -90,7 +90,7 @@ def get_matches(
     return paginate(db, match_query)
 
 
-@router.get("/{id}", response_model=schemas.MatchResponse)
+@router.get("/{id}", response_model=MatchResponse)
 def get_match(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
@@ -144,10 +144,10 @@ def delete_match(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}", response_model=schemas.MatchResponse, include_in_schema=False)
+@router.put("/{id}", response_model=MatchResponse, include_in_schema=False)
 def update_match(
     id: int,
-    updated_match: schemas.MatchCreate,
+    updated_match: MatchCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):

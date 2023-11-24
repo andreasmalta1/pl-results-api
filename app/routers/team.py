@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
 from app.models import Team
-import app.schemas as schemas
+from app.schemas import TeamCreate, TeamResponse
 
 
 router = APIRouter(prefix="/api/teams", tags=["Teams"])
@@ -16,11 +16,11 @@ router = APIRouter(prefix="/api/teams", tags=["Teams"])
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=schemas.TeamResponse,
+    response_model=TeamResponse,
     include_in_schema=False,
 )
 def create_team(
-    team: schemas.TeamCreate,
+    team: TeamCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
@@ -41,7 +41,7 @@ def create_team(
     return new_team
 
 
-@router.get("/", response_model=Page[schemas.TeamResponse])
+@router.get("/", response_model=Page[TeamResponse])
 def get_teams(
     current: bool | None = None,
     api_key: str = Security(get_api_key),
@@ -54,7 +54,7 @@ def get_teams(
     return paginate(db, teams_query)
 
 
-@router.get("/{id}", response_model=schemas.TeamResponse)
+@router.get("/{id}", response_model=TeamResponse)
 def get_team(
     id: int, api_key: str = Security(get_api_key), db: Session = Depends(get_db)
 ):
@@ -93,10 +93,10 @@ def delete_team(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}", response_model=schemas.TeamResponse, include_in_schema=False)
+@router.put("/{id}", response_model=TeamResponse, include_in_schema=False)
 def update_team(
     id: int,
-    updated_team: schemas.TeamCreate,
+    updated_team: TeamCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):

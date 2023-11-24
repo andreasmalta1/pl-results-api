@@ -8,7 +8,7 @@ from datetime import date
 from app.auth import get_api_key, authorization_error
 from app.database import get_db
 from app.models import Stints, Manager, Team
-import app.schemas as schemas
+from app.schemas import StintsCreate, StintsResponse
 
 
 router = APIRouter(prefix="/api/stints", tags=["ManagerialStints"])
@@ -17,11 +17,11 @@ router = APIRouter(prefix="/api/stints", tags=["ManagerialStints"])
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=schemas.StintsResponse,
+    response_model=StintsResponse,
     include_in_schema=False,
 )
 def create_stint(
-    stint: schemas.StintsCreate,
+    stint: StintsCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
@@ -69,7 +69,7 @@ def create_stint(
     return new_stint
 
 
-@router.get("/", response_model=Page[schemas.StintsResponse])
+@router.get("/", response_model=Page[StintsResponse])
 def get_stints(
     current: bool | None = None,
     manager: int | None = None,
@@ -94,7 +94,7 @@ def get_stints(
     return paginate(db, stints_query)
 
 
-@router.get("/{id}", response_model=schemas.StintsResponse)
+@router.get("/{id}", response_model=StintsResponse)
 def get_stint(
     id: int,
     api_key: str = Security(get_api_key),
@@ -135,10 +135,10 @@ def delete_stint(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}", response_model=schemas.StintsResponse, include_in_schema=False)
+@router.put("/{id}", response_model=StintsResponse, include_in_schema=False)
 def update_stint(
     id: int,
-    updated_stint: schemas.StintsCreate,
+    updated_stint: StintsCreate,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
