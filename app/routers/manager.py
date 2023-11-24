@@ -53,7 +53,7 @@ def get_managers(
 ):
     managers_query = select(Manager).order_by(Manager.id)
     if nation:
-        managers_query = managers_query.filter(Manager.nationality == nation)
+        managers_query = managers_query.filter(Manager.nation_id == nation)
 
     return paginate(db, managers_query)
 

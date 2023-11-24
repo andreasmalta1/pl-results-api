@@ -78,7 +78,6 @@ class StintsModel(BaseModel):
     date_start: date
     date_end: Optional[date] = None
     current: bool = False
-    nationality: int
 
 
 class StintsCreate(StintsModel):
