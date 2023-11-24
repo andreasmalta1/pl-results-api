@@ -41,52 +41,47 @@ class MatchResponse(BaseModel):
         from_attributes = True
 
 
-class NationModel(BaseModel):
+class NationCreate(BaseModel):
     name: str
 
 
-class NationCreate(NationModel):
-    pass
-
-
-class NationResponse(NationModel):
+class NationResponse(BaseModel):
     id: int
+    name: str
 
     class Config:
         from_attributes = True
 
 
-class ManagerModel(BaseModel):
+class ManagerCreate(BaseModel):
+    nation_id: int
     name: str
 
 
-class ManagerCreate(ManagerModel):
-    nation_id: int
-
-
-class ManagerResponse(ManagerModel):
+class ManagerResponse(BaseModel):
     id: int
+    name: str
     nation: Optional[NationResponse]
 
     class Config:
         from_attributes = True
 
 
-class StintsModel(BaseModel):
+class StintsCreate(BaseModel):
+    manager_id: int
+    team_id: int
     date_start: date
     date_end: Optional[date] = None
     current: bool = False
 
 
-class StintsCreate(StintsModel):
-    manager_id: int
-    team_id: int
-
-
-class StintsResponse(StintsModel):
+class StintsResponse(BaseModel):
     id: int
     manager: Optional[ManagerResponse]
     team: Optional[TeamResponse]
+    date_start: date
+    date_end: Optional[date] = None
+    current: bool = False
 
     class Config:
         from_attributes = True
