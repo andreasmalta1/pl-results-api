@@ -54,18 +54,18 @@ class Manager(Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
-    nationality = Column(Integer, ForeignKey("nations.id"), nullable=False)
-    team = Column(Integer, ForeignKey("teams.id"), nullable=False)
+    nation_id = Column(Integer, ForeignKey("nations.id"), nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
 
 
-class ManagerStints(Base):
-    __tablename__ = "managerialstints"
+class Stints(Base):
+    __tablename__ = "stints"
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     manager_id = Column(Integer, ForeignKey("managers.id"), nullable=False)
+    team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     date_start = Column(DATE, nullable=False)
     date_end = Column(DATE)
     current = Column(Boolean, server_default="False")

@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, model_serializer
 from datetime import date
-from typing import Optional
+from typing import Optional, Dict, Any
 
 
 class TeamModel(BaseModel):
@@ -42,7 +42,6 @@ class MatchResponse(BaseModel):
 
 
 class NationModel(BaseModel):
-    id: int
     name: str
 
 
@@ -51,18 +50,15 @@ class NationCreate(NationModel):
 
 
 class NationResponse(NationModel):
+    id: int
+
     class Config:
         from_attributes = True
 
 
 class ManagerModel(BaseModel):
     name: str
-    # fotmob_id: int
-    nationality: int
-    team: int
-    # date_start: date
-    # date_end: Optional[date] = None
-    current: bool = False
+    nation_id: int
 
 
 class ManagerCreate(ManagerModel):
@@ -70,6 +66,26 @@ class ManagerCreate(ManagerModel):
 
 
 class ManagerResponse(ManagerModel):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class StintsModel(BaseModel):
+    manager_id: int
+    team_id: int
+    date_start: date
+    date_end: Optional[date] = None
+    current: bool = False
+    nationality: int
+
+
+class StintsCreate(StintsModel):
+    pass
+
+
+class StintsResponse(StintsModel):
     id: int
 
     class Config:
