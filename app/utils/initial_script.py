@@ -2,6 +2,7 @@ import os
 import sys
 import csv
 import requests
+import pandas as pd
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
 
@@ -9,6 +10,8 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
 from app.models import Team, Match, LastRow, Season
+
+CARETAKER_MANAGER = "‡"
 
 
 def set_details():
@@ -100,10 +103,33 @@ def get_pl_matches():
         db.commit()
 
 
+def get_pl_managers():
+    source = requests.get(os.getenv("PL_MANAGERS_URL")).text
+    page = BeautifulSoup(source, "lxml")
+    table = page.find("table", class_="sortable")
+    body = table.find("tbody")
+    rows = body.find_all("tr")[1:]
+    managers = []
+    # get list of names initially only
+    for row in rows:
+        name = row.find("th").get_text().strip()
+        if CARETAKER_MANAGER in name:
+            continue
+        managers.append(name)
+    print(managers)
+    print(len(managers))
+    # cells = row.find_all("td")
+    # for cell in cells:
+    #     print(cell)
+    #     return
+    # return
+
+
 def main():
-    set_details()
-    create_teams()
-    get_pl_matches()
+    # set_details()
+    # create_teams()
+    # get_pl_matches()
+    get_pl_managers()
 
 
 if __name__ == "__main__":
