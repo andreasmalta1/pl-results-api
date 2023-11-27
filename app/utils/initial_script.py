@@ -2,16 +2,17 @@ import os
 import sys
 import csv
 import requests
-import pandas as pd
+from datetime import datetime
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
 
 sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
-from app.models import Team, Match, LastRow, Season
+from app.models import Team, Match, LastRow, Season, Nation
 
 CARETAKER_MANAGER = "‡"
+INCUMBENT_MANAGER = "†"
 
 
 def set_details():
@@ -109,15 +110,57 @@ def get_pl_managers():
     table = page.find("table", class_="sortable")
     body = table.find("tbody")
     rows = body.find_all("tr")[1:]
-    managers = []
-    # get list of names initially only
+
+    list_managers = []
+    list_stints = []
+    list_nations = []
+
+    manager_dict = []
+    # Need name, nationality
+    stint_dict = []
+    # need manager, team, date_start, date_end, current
+
     for row in rows:
         name = row.find("th").get_text().strip()
         if CARETAKER_MANAGER in name:
             continue
-        managers.append(name)
-    print(managers)
-    print(len(managers))
+
+        name = name.replace(INCUMBENT_MANAGER, "")
+        cells = row.find_all("td")
+
+        country = cells[0].find("a").find("img")["alt"]
+        with contextmanager(get_db)() as db:
+            country_obj = db.query(Nation).filter(Nation.name == country).first()
+
+        if not country_obj:
+            country_dict = {"name": country}
+            country_obj = Nation(**country_dict)
+
+            with contextmanager(get_db)() as db:
+                db.add(country_obj)
+                db.commit()
+                country_id = country_obj.id
+        else:
+            country_id = country_obj.id
+
+        team = cells[1].get_text().strip()
+        date_start = cells[2].find("span").get_text().strip()
+        date_start = datetime.strptime(date_start, "%d %B %Y")
+        date_end = cells[3].get_text().strip()
+        if "Present" not in date_end:
+            date_end = datetime.strptime(date_end, "%d %B %Y")
+        else:
+            current = True
+        # print(name)
+        # print(date_start)
+        # print(date_end)
+        # return
+
+        # if
+
+    #     managers.append(name)
+    # print(managers)
+    # print(len(managers))
     # cells = row.find_all("td")
     # for cell in cells:
     #     print(cell)
