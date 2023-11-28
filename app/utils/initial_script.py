@@ -9,7 +9,7 @@ from contextlib import contextmanager
 sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
-from app.models import Team, Match, LastRow, Season, Nation
+from app.models import Team, Match, LastRow, Season, Nation, Manager, Stints
 
 CARETAKER_MANAGER = "‡"
 INCUMBENT_MANAGER = "†"
@@ -111,14 +111,7 @@ def get_pl_managers():
     body = table.find("tbody")
     rows = body.find_all("tr")[1:]
 
-    list_managers = []
     list_stints = []
-    list_nations = []
-
-    manager_dict = []
-    # Need name, nationality
-    stint_dict = []
-    # need manager, team, date_start, date_end, current
 
     for row in rows:
         name = row.find("th").get_text().strip()
@@ -143,29 +136,52 @@ def get_pl_managers():
         else:
             country_id = country_obj.id
 
-        team = cells[1].get_text().strip()
+        with contextmanager(get_db)() as db:
+            manager_obj = db.query(Manager).filter(Manager.name == name).first()
+
+        if not manager_obj:
+            manager_dict = {"name": name, "nation_id": country_id}
+            manager_obj = Manager(**manager_dict)
+
+            with contextmanager(get_db)() as db:
+                db.add(manager_obj)
+                db.commit()
+                manager_id = manager_obj.id
+
+        else:
+            manager_id = manager_obj.id
+
+        team_name = cells[1].get_text().strip()
+
+        with contextmanager(get_db)() as db:
+            team_obj = (
+                db.query(Team).filter(Team.name.like("%" + team_name + "%")).first()
+            )
+
         date_start = cells[2].find("span").get_text().strip()
         date_start = datetime.strptime(date_start, "%d %B %Y")
         date_end = cells[3].get_text().strip()
         if "Present" not in date_end:
+            current = False
             date_end = datetime.strptime(date_end, "%d %B %Y")
         else:
             current = True
-        # print(name)
-        # print(date_start)
-        # print(date_end)
-        # return
+            date_end = None
 
-        # if
+        stint_dict = {
+            "manager_id": manager_id,
+            "team_id": team_obj.id,
+            "date_start": date_start,
+            "date_end": date_end,
+            "current": current,
+        }
+        stint_obj = Stints(**stint_dict)
+        list_stints.append(stint_obj)
 
-    #     managers.append(name)
-    # print(managers)
-    # print(len(managers))
-    # cells = row.find_all("td")
-    # for cell in cells:
-    #     print(cell)
-    #     return
-    # return
+    if list_stints:
+        with contextmanager(get_db)() as db:
+            db.add_all(list_stints)
+            db.commit()
 
 
 def main():
