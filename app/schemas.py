@@ -6,7 +6,6 @@ from typing import Optional, Dict, Any
 class TeamModel(BaseModel):
     id: int
     name: str
-    alternative_name: str
     current_team: bool = False
 
 
@@ -35,7 +34,7 @@ class MatchResponse(BaseModel):
     away_team: Optional[TeamResponse]
     away_score: int
     match_date: Optional[date] = date.today()
-    season: Optional[str] = Field(min_length=9, max_length=9, default=None)
+    season: str
 
     class Config:
         from_attributes = True

@@ -14,7 +14,6 @@ class Team(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
-    alternative_name = Column(String, nullable=False)
     current_team = Column(Boolean, server_default="False")
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")

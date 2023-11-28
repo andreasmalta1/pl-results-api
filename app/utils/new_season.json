@@ -1,6 +1,6 @@
 {
   "season": "",
-  "new_teams": [{ "id": null, "name": null, "alternative_name": null }],
+  "new_teams": [{ "id": null, "name": null }],
   "promotion": [],
   "relegation": []
 }
