@@ -10,6 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
 from app.models import Team, Match, LastRow, Season, Nation, Manager, Stints
+import new_matches
 
 CARETAKER_MANAGER = "‡"
 INCUMBENT_MANAGER = "†"
@@ -185,9 +186,10 @@ def get_pl_managers():
 
 
 def main():
-    # set_details()
-    # create_teams()
-    # get_pl_matches()
+    set_details()
+    create_teams()
+    get_pl_matches()
+    new_matches.main()
     get_pl_managers()
 
 

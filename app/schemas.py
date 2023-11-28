@@ -1,11 +1,12 @@
-from pydantic import BaseModel, Field, model_serializer
+from pydantic import BaseModel, Field
 from datetime import date
-from typing import Optional, Dict, Any
+from typing import Optional
 
 
 class TeamModel(BaseModel):
     id: int
     name: str
+    url: str
     current_team: bool = False
 
 
