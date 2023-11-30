@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 from pathlib import Path
 
+from app import Base, engine
 from app.routers import team, match, nation, manager, stints, home, contact
-from app.database import Base, engine
 
 
 Base.metadata.create_all(bind=engine)
