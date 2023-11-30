@@ -47,11 +47,15 @@ def create_manager(
 
 @router.get("/", response_model=Page[ManagerResponse])
 def get_managers(
+    search: str | None = None,
     nation: int | None = None,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
     managers_query = select(Manager).order_by(Manager.id)
+    if search != None:
+        managers_query = managers_query.filter(Manager.name.ilike("%" + search + "%"))
+
     if nation:
         managers_query = managers_query.filter(Manager.nation_id == nation)
 

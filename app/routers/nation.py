@@ -37,10 +37,14 @@ def create_nation(
 
 @router.get("/", response_model=Page[NationResponse])
 def get_nations(
+    search: str | None = None,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
 ):
     nation_query = select(Nation).order_by(Nation.id)
+    if search != None:
+        nation_query = nation_query.filter(Nation.name.ilike("%" + search + "%"))
+
     return paginate(db, nation_query)
 
 

@@ -6,7 +6,7 @@ from typing import Optional
 class TeamModel(BaseModel):
     id: int
     name: str
-    url: str
+    url: Optional[str]
     current_team: bool = False
 
 

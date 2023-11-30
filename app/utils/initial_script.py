@@ -119,7 +119,7 @@ def get_pl_managers():
         if CARETAKER_MANAGER in name:
             continue
 
-        name = name.replace(INCUMBENT_MANAGER, "")
+        name = name.replace(INCUMBENT_MANAGER, "").strip()
         cells = row.find_all("td")
 
         country = cells[0].find("a").find("img")["alt"]

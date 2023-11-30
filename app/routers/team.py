@@ -43,6 +43,7 @@ def create_team(
 
 @router.get("/", response_model=Page[TeamResponse])
 def get_teams(
+    search: str | None = None,
     current: bool | None = None,
     api_key: str = Security(get_api_key),
     db: Session = Depends(get_db),
@@ -50,6 +51,9 @@ def get_teams(
     teams_query = select(Team).order_by(Team.id)
     if current != None:
         teams_query = teams_query.filter(Team.current_team == current)
+
+    if search != None:
+        teams_query = teams_query.filter(Team.name.ilike("%" + search + "%"))
 
     return paginate(db, teams_query)
 
