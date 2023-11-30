@@ -3,10 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP, DATE
 
-try:
-    from database import Base
-except ModuleNotFoundError:
-    from .database import Base
+from app import Base
 
 
 class Team(Base):
@@ -15,7 +12,7 @@ class Team(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
     current_team = Column(Boolean, server_default="False")
-    url = Column(String, nullable=True)
+    logo = Column(String, nullable=True)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
@@ -44,6 +41,7 @@ class Nation(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
+    flag = Column(String, nullable=True)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
@@ -55,6 +53,7 @@ class Manager(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
     nation_id = Column(Integer, ForeignKey("nations.id"), nullable=False)
+    image = Column(String, nullable=True)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )

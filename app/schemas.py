@@ -3,18 +3,18 @@ from datetime import date
 from typing import Optional
 
 
-class TeamModel(BaseModel):
+class TeamCreate(BaseModel):
+    name: str
+    current_team: bool = False
+    logo: Optional[str]
+
+
+class TeamResponse(BaseModel):
     id: int
     name: str
-    url: Optional[str]
     current_team: bool = False
+    logo: Optional[str]
 
-
-class TeamCreate(TeamModel):
-    pass
-
-
-class TeamResponse(TeamModel):
     class Config:
         from_attributes = True
 
@@ -43,25 +43,29 @@ class MatchResponse(BaseModel):
 
 class NationCreate(BaseModel):
     name: str
+    flag: Optional[str]
 
 
 class NationResponse(BaseModel):
     id: int
     name: str
+    flag: Optional[str]
 
     class Config:
         from_attributes = True
 
 
 class ManagerCreate(BaseModel):
-    nation_id: int
     name: str
+    nation_id: int
+    image: Optional[str]
 
 
 class ManagerResponse(BaseModel):
     id: int
     name: str
-    nation: Optional[NationResponse]
+    nation_id: Optional[NationResponse]
+    image: Optional[str]
 
     class Config:
         from_attributes = True
