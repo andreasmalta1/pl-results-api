@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 from alembic import context
 import os
 
-from app.models import Base
+from app import Base, models
+
+# from app.models import Team, Match, Nation, Manager, Stints, LastRow, Season, User
 
 load_dotenv()
 
@@ -26,7 +28,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata
+target_metadata = models.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
