@@ -64,7 +64,7 @@ class ManagerCreate(BaseModel):
 class ManagerResponse(BaseModel):
     id: int
     name: str
-    nation_id: Optional[NationResponse]
+    nation: Optional[NationResponse]
     image: Optional[str]
 
     class Config:
