@@ -14,11 +14,31 @@ Base.metadata.create_all(bind=engine)
 tags_metadata = [
     {
         "name": "Teams",
-        "description": "Team information",
+        "description": "Information about all the teams to have particapted in the Premier League",
+    },
+    {
+        "name": "Matches",
+        "description": "All the matches from the 1992/1993 to today. Contains the score, date and season",
+    },
+    {
+        "name": "Nations",
+        "description": "All the nations that PL managers have come from",
+    },
+    {
+        "name": "Managers",
+        "description": "All managers to have taken charge of a PL side (excludes caretaker managers)",
+    },
+    {
+        "name": "ManagerialStints",
+        "description": "All managerial stints in the PL era, including current managers",
     },
 ]
 
-description = """
+description = """A Premier League Results API.\n
+Query all the teams to have played in the PL, all the matches that have been played and all the managers in the PL from 1992 to this day.\n
+Updated daily with the latest information.\n
+Message me for feedback, help and any errors found in the data.\n
+FREE FOR USE. Please use responsibly!!!
 """
 
 
