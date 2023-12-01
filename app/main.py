@@ -38,6 +38,7 @@ description = """A Premier League Results API.\n
 Query all the teams to have played in the PL, all the matches that have been played and all the managers in the PL from 1992 to this day.\n
 Updated daily with the latest information.\n
 Message me for feedback, help and any errors found in the data.\n
+Register for an API key to use.\n
 FREE FOR USE. Please use responsibly!!!
 """
 
