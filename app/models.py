@@ -101,6 +101,7 @@ class User(Base):
     admin = Column(Boolean, server_default="False")
     is_verified = Column(Boolean, server_default="False")
     verification_code = Column(String, unique=True)
+    num_visits = Column(Integer, primary_key=True, nullable=False, server_default="0")
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )

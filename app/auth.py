@@ -25,11 +25,13 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
 
     with contextmanager(get_db)() as db:
         user = db.query(User).filter(User.api_key == api_key_header).first()
+        if not user:
+            authorization_error()
 
-    if not user:
-        authorization_error()
+        user.num_visits = user.num_visits + 1
+        db.commit()
 
-    return user.admin
+        return user.admin
 
 
 def create_api_key():
