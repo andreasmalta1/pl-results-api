@@ -1,6 +1,6 @@
 import os
 import sys
-import csv
+import json
 import requests
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -30,14 +30,9 @@ def set_details():
 
 def create_teams():
     team_list = []
-    with open("csvs/team_ids.csv") as teams:
-        reader = csv.DictReader(teams)
-        for team in reader:
-            team["id"] = int(team["id"])
-            if team["current_team"] == "true":
-                team["current_team"] = True
-            else:
-                team["current_team"] = False
+    with open("json/teams.json") as f:
+        teams = json.load(f)["teams"]
+        for team in teams:
             team_obj = Team(**team)
             team_list.append(team_obj)
 

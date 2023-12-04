@@ -9,7 +9,7 @@ from app import Base
 class Team(Base):
     __tablename__ = "teams"
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
     current_team = Column(Boolean, server_default="False")
     logo = Column(String, nullable=True)
