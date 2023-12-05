@@ -5,7 +5,7 @@ from fastapi_pagination import add_pagination
 from pathlib import Path
 
 from app import Base, engine
-from app.routers import team, match, nation, manager, stints, home, contact
+from app.routers import team, match, nation, manager, stints, home, contact, admin
 
 
 Base.metadata.create_all(bind=engine)
@@ -71,6 +71,7 @@ app.include_router(manager.router)
 app.include_router(stints.router)
 app.include_router(home.router)
 app.include_router(contact.router)
+app.include_router(admin.router)
 
 add_pagination(app)
 
