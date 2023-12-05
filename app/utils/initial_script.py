@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import requests
+import boto3
 from datetime import datetime
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
@@ -11,6 +12,11 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 from app.database import get_db
 from app.models import Team, Match, LastRow, Season, Nation, Manager, Stints
 import new_matches
+
+ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+SECRET_KEY = os.getenv("AWS_SECRET_KEY")
+BUCKET = os.getenv("AWS_BUCKET")
+BUCKET_HOST = os.getenv("BUCKET_HOST")
 
 CARETAKER_MANAGER = "‡"
 INCUMBENT_MANAGER = "†"
@@ -29,16 +35,25 @@ def set_details():
 
 
 def create_teams():
-    team_list = []
     with open("json/teams.json") as f:
         teams = json.load(f)["teams"]
         for team in teams:
             team_obj = Team(**team)
-            team_list.append(team_obj)
 
-    with contextmanager(get_db)() as db:
-        db.add_all(team_list)
-        db.commit()
+            with contextmanager(get_db)() as db:
+                db.add(team_obj)
+                db.commit()
+                team_id = team_obj.id
+
+            upload_to_bucket(
+                "clubs", team.get("name").lower().replace(" ", "-"), team_id
+            )
+
+            image_url = f"{BUCKET_HOST}/clubs/{team_id}.png"
+            with contextmanager(get_db)() as db:
+                team = db.query(Team).filter(Team.id == team_id).first()
+                team.logo = image_url
+                db.commit()
 
 
 def get_pl_matches():
@@ -129,6 +144,15 @@ def get_pl_managers():
                 db.add(country_obj)
                 db.commit()
                 country_id = country_obj.id
+
+            upload_to_bucket("nations", country.lower().replace(" ", "-"), country_id)
+
+            image_url = f"{BUCKET_HOST}/nations/{country_id}.png"
+            with contextmanager(get_db)() as db:
+                nation = db.query(Nation).filter(Nation.id == country_id).first()
+                nation.flag = image_url
+                db.commit()
+
         else:
             country_id = country_obj.id
 
@@ -180,11 +204,26 @@ def get_pl_managers():
             db.commit()
 
 
+def upload_to_bucket(folder_name, file_name, image_id):
+    client = boto3.client(
+        "s3", aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY
+    )
+
+    key = f"{folder_name}/{image_id}.png"
+    with open(f"images/{folder_name}/{file_name}.png", "rb") as image_file:
+        client.put_object(
+            Bucket=BUCKET,
+            Key=key,
+            Body=image_file,
+            ContentType="image/png",
+        )
+
+
 def main():
-    set_details()
-    create_teams()
-    get_pl_matches()
-    new_matches.main()
+    # set_details()
+    # create_teams()
+    # get_pl_matches()
+    # new_matches.main()
     get_pl_managers()
 
 
