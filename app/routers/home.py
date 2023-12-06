@@ -83,7 +83,7 @@ async def create_new_user(
 
 
 @router.get("/verifyemail/{token}", include_in_schema=False)
-def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
+def verify_user(request: Request, token: str, db: Session = Depends(get_db)):
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
@@ -100,8 +100,12 @@ def verify_me(request: Request, token: str, db: Session = Depends(get_db)):
         )
 
     api_key = create_api_key()
+    hashed_key = hashlib.sha256()
+    hashed_key.update(bytes.fromhex(api_key))
+    hashed_key = hashed_key.hexdigest()
+
     user.is_verified = True
-    user.api_key = api_key
+    user.api_key = hashed_key
     user.verification_code = None
 
     db.commit()

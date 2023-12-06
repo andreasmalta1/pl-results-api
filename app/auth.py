@@ -2,6 +2,7 @@ from fastapi import HTTPException, status, Security
 from fastapi.security import APIKeyHeader
 from contextlib import contextmanager
 import secrets
+import hashlib
 
 from .database import get_db
 from .models import User
@@ -23,8 +24,12 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
         HTTPException: If the API key is invalid or missing.
     """
 
+    hashed_key = hashlib.sha256()
+    hashed_key.update(bytes.fromhex(api_key_header))
+    hashed_key = hashed_key.hexdigest()
+
     with contextmanager(get_db)() as db:
-        user = db.query(User).filter(User.api_key == api_key_header).first()
+        user = db.query(User).filter(User.api_key == hashed_key).first()
         if not user:
             authorization_error()
 
@@ -35,7 +40,7 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
 
 
 def create_api_key():
-    return secrets.token_urlsafe(16)
+    return secrets.token_hex(16)
 
 
 def authorization_error():
