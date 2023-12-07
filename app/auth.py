@@ -23,10 +23,12 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
     Raises:
         HTTPException: If the API key is invalid or missing.
     """
-
-    hashed_key = hashlib.sha256()
-    hashed_key.update(bytes.fromhex(api_key_header))
-    hashed_key = hashed_key.hexdigest()
+    try:
+        hashed_key = hashlib.sha256()
+        hashed_key.update(bytes.fromhex(api_key_header))
+        hashed_key = hashed_key.hexdigest()
+    except ValueError:
+        authorization_error()
 
     with contextmanager(get_db)() as db:
         user = db.query(User).filter(User.api_key == hashed_key).first()

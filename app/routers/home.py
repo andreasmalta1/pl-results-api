@@ -9,6 +9,7 @@ import hashlib
 
 from app.database import get_db
 from app.auth import create_api_key
+from app.oauth2 import get_current_user_from_cookie
 from app.send_email import send_email
 from app.models import User
 
@@ -20,7 +21,8 @@ router = APIRouter()
 
 @router.get("/", include_in_schema=False)
 def home_page(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    # user = get_current_user_from_cookie(request)
+    return templates.TemplateResponse("index.html", {"request": request, "user": user})
 
 
 @router.get("/register", include_in_schema=False)
