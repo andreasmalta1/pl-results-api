@@ -83,6 +83,11 @@
         <a href="{{ url_for('contact') }}" class="nav-item" style="--i: 3"
           >Contact</a
         >
+        {% if user %}
+        <a href="{{ url_for('logout') }}" class="nav-item" style="--i: 3"
+          >Logout</a
+        >
+        {% endif %}
       </nav>
     </header>
 
