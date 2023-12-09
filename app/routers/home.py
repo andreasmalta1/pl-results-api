@@ -22,6 +22,7 @@ router = APIRouter()
 @router.get("/", include_in_schema=False)
 def home_page(request: Request):
     # user = get_current_user_from_cookie(request)
+    user = None
     return templates.TemplateResponse("index.html", {"request": request, "user": user})
 
 

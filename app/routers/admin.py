@@ -1,4 +1,5 @@
 from fastapi import status, APIRouter, Form, HTTPException, Request
+from fastapi import Response
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import EmailStr
@@ -14,14 +15,20 @@ templates = Jinja2Templates(directory=str(Path(BASE_DIR, "templates")))
 router = APIRouter(prefix="/admin")
 
 
+@router.get("/", include_in_schema=False)
+def test_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
 @router.get("/login", include_in_schema=False)
 def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @router.post("/login", include_in_schema=False)
-def login(
+async def login(
     request: Request,
+    response: Response,
     email: EmailStr = Form(...),
     password: str = Form(...),
 ):
@@ -32,17 +39,11 @@ def login(
         return templates.TemplateResponse(
             "login.html", {"request": request, "message": "not logged in"}
         )
-    response = RedirectResponse("/", status.HTTP_302_FOUND)
-    response.set_cookie(
-        key=Settings.COOKIE_NAME, value=f"Bearer {access_token}", httponly=True
-    )
-    return templates.TemplateResponse(
-        "login.html", {"request": request, "message": "logged in"}
-    )
+    return response
 
 
-# @router.get("/logout")
-# def logout():
-#     response = RedirectResponse(url="/")
-#     response.delete_cookie(Settings.COOKIE_NAME)
-#     return response
+@router.get("/logout")
+def logout():
+    response = RedirectResponse(url="/")
+    response.delete_cookie(Settings.COOKIE_NAME)
+    return response
