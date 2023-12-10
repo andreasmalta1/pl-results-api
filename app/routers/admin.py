@@ -17,7 +17,7 @@ router = APIRouter(prefix="/admin")
 
 @router.get("/", include_in_schema=False)
 def test_page(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+    return templates.TemplateResponse("admin.html", {"request": request})
 
 
 @router.get("/login", include_in_schema=False)
@@ -32,7 +32,7 @@ async def login(
     email: EmailStr = Form(...),
     password: str = Form(...),
 ):
-    response = RedirectResponse("/", status.HTTP_302_FOUND)
+    response = RedirectResponse("/admin", status.HTTP_302_FOUND)
     try:
         access_token = oauth_login(response, email, password)
     except HTTPException:
