@@ -84,6 +84,9 @@
           >Contact</a
         >
         {% if user %}
+        <a href="{{ url_for('admin_page') }}" class="nav-item" style="--i: 3"
+          >Admin</a
+        >
         <a href="{{ url_for('logout') }}" class="nav-item" style="--i: 3"
           >Logout</a
         >

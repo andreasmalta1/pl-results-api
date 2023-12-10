@@ -27,8 +27,6 @@ def create_team(
     if not api_key:
         authorization_error()
 
-    # print(api_key)
-
     new_team = Team(**team.model_dump())
     if db.query(Team).filter(Team.id == new_team.id).first() is not None:
         raise HTTPException(

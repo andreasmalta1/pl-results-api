@@ -1,4 +1,4 @@
-from fastapi import status, APIRouter, Form, HTTPException, Request
+from fastapi import status, APIRouter, Depends, Form, HTTPException, Request
 from fastapi import Response
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -6,7 +6,8 @@ from pydantic import EmailStr
 from pathlib import Path
 
 from app.config import Settings
-from app.oauth2 import oauth_login
+from app.models import User
+from app.oauth2 import oauth_login, get_current_user_from_token
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,7 +17,7 @@ router = APIRouter(prefix="/admin")
 
 
 @router.get("/", include_in_schema=False)
-def test_page(request: Request):
+def admin_page(request: Request, user: User = Depends(get_current_user_from_token)):
     return templates.TemplateResponse("admin.html", {"request": request})
 
 
