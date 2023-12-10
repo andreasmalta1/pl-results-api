@@ -88,6 +88,9 @@ def decode_token(token: str) -> User:
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials.",
     )
+    if not token:
+        return None
+
     token = token.removeprefix("Bearer").strip()
     try:
         payload = jwt.decode(
@@ -100,8 +103,16 @@ def decode_token(token: str) -> User:
         print(e)
         raise credentials_exception
 
-    user = get_user(username)
-    return user
+    with contextmanager(get_db)() as db:
+        user = (
+            db.query(User)
+            .filter(User.email == username)
+            .filter(User.admin == True)
+            .first()
+        )
+        if user:
+            return user
+        return None
 
 
 def get_current_user_from_token(token: str = Depends(oauth2_scheme)) -> User:
