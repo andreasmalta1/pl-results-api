@@ -3,7 +3,7 @@
   href="{{ url_for('static', path='/css/register.css') }}"
   rel="stylesheet"
 />
-{% endblock %} {% block title %} PL Results API | Register {% endblock %} {%
+{% endblock %} {% block title %} PL Results API | Login {% endblock %} {%
 block content %}
 
 <div class="main-container">
@@ -25,7 +25,7 @@ block content %}
       autocomplete="off"
       required
     />
-    <button class="link-btn generate-btn">Generate API KEY</button>
+    <button class="link-btn generate-btn">Login</button>
   </form>
   <div id="messages">
     <h4 class="message">{{ message }}</h4>
@@ -34,5 +34,5 @@ block content %}
 </div>
 
 {% endblock %} {% block scripts %}
-<script src="{{ url_for('static', path='/javascript/register.js') }}"></script>
+<script src="{{ url_for('static', path='/javascript/login.js') }}"></script>
 {% endblock%}

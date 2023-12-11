@@ -37,7 +37,7 @@ async def login(
         return templates.TemplateResponse(
             "login.html", {"request": request, "message": "No email inputted"}
         )
-    
+
     if not password:
         return templates.TemplateResponse(
             "login.html", {"request": request, "message": "No password inputted"}

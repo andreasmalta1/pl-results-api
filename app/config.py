@@ -1,5 +1,6 @@
 import os
 
+
 class Settings:
     SECRET_KEY = os.getenv("JWT_KEY")
     ALGORITHM = os.getenv("HS256")

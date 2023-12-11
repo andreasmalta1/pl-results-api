@@ -12,8 +12,7 @@ inputBtn.addEventListener("click", function (e) {
     messageEl.classList.add("message")
     messagesEl.appendChild(messageEl)
     return false
-  }
-  else if (!passwordEl.value) {
+  } else if (!passwordEl.value) {
     e.preventDefault()
     const messageEl = document.createElement("h4")
     messageEl.textContent = "Please input a password"
