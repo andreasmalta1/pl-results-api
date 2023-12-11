@@ -33,12 +33,22 @@ async def login(
     email: EmailStr = Form(...),
     password: str = Form(...),
 ):
+    if not email:
+        return templates.TemplateResponse(
+            "login.html", {"request": request, "message": "No email inputted"}
+        )
+    
+    if not password:
+        return templates.TemplateResponse(
+            "login.html", {"request": request, "message": "No password inputted"}
+        )
+
     response = RedirectResponse("/admin", status.HTTP_302_FOUND)
     try:
         access_token = oauth_login(response, email, password)
     except HTTPException:
         return templates.TemplateResponse(
-            "login.html", {"request": request, "message": "not logged in"}
+            "login.html", {"request": request, "message": "Login Unsuccessful"}
         )
     return response
 
