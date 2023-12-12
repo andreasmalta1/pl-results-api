@@ -19,7 +19,7 @@ import os
 
 from app.config import Settings
 from app.database import get_db
-from app.models import Nation, Team, User
+from app.models import Manager, Nation, Team, User
 from app.oauth2 import oauth_login, get_current_user_from_token
 from app.utils import bucket_upload
 
@@ -166,4 +166,64 @@ def add_new_nation(
     return templates.TemplateResponse(
         "new_nation.html",
         {"request": request, "message": "New Nation added successfully"},
+    )
+
+
+@router.get("/new-manager", include_in_schema=False)
+def new_manager(
+    request: Request,
+    user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    nations = db.query(Nation).all()
+    return templates.TemplateResponse(
+        "new_manager.html", {"request": request, "nations": nations}
+    )
+
+
+@router.post("/new-manager", include_in_schema=False)
+def add_new_manager(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user_from_token),
+    manager_name: str = Form(...),
+    nation: str = Form(...),
+    manager_image: UploadFile = File(...),
+):
+    manager_dict = {"name": manager_name, "nation_id": nation}
+
+    new_manager = Manager(**manager_dict)
+    db.add(new_manager)
+    db.commit()
+    db.refresh(new_manager)
+
+    temp = NamedTemporaryFile(delete=False, suffix=".png")
+    try:
+        try:
+            contents = manager_image.file.read()
+            with temp as temp_file:
+                temp_file.write(contents)
+        except Exception:
+            raise HTTPException(status_code=500, detail="Error on uploading the file")
+        finally:
+            manager_image.file.close()
+
+        bucket_upload.upload_to_bucket("managers", temp.name, new_manager.id)
+        image_url = f"{BUCKET_HOST}/managers/{new_manager.id}.png"
+        new_manager.image = image_url
+        db.commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
+    finally:
+        os.remove(temp.name)
+
+    nations = db.query(Nation).all()
+    return templates.TemplateResponse(
+        "new_manager.html",
+        {
+            "request": request,
+            "message": "New Manager added successfully",
+            "nations": nations,
+        },
     )

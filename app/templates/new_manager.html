@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block styles%}
+<link
+  href="{{ url_for('static', path='/css/new_manager.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block title %} PL Results API | Add New Manager {% endblock %}
+{% block content %}
+
+<div class="main-container">
+  <h1 class="main-header">Admin - Add New Manager</h1>
+  <form
+    action="{{ url_for('add_new_manager')}}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input
+      type="text"
+      id="manager-name"
+      name="manager_name"
+      placeholder="Manager Name"
+      autocomplete="off"
+      required
+    />
+
+    <label for="nation"
+      >Nation:
+      <select name="nation" id="manager-nation">
+        {% for nation in nations %}
+        <option value="{{ nation.id }}">{{ nation.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <input type="file" id="manager-image" name="manager_image" />
+
+    <button class="link-btn generate-btn">Add New Manager</button>
+  </form>
+  <div id="messages">
+    <h4 class="message">{{ message }}</h4>
+  </div>
+</div>
+
+{% endblock %}
