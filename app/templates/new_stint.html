@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block styles%}
+<link
+  href="{{ url_for('static', path='/css/new_stint.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block title %} PL Results API | Add New Stint {% endblock %}
+{% block content %}
+
+<div class="main-container">
+  <h1 class="main-header">Admin - Add New Stint</h1>
+  <form action="{{ url_for('add_new_stint')}}" method="post">
+    <label for="manager"
+      >Manager:
+      <select name="manager" id="stint-manager">
+        {% for manager in managers %}
+        <option value="{{ manager.id }}">{{ manager.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label for="team"
+      >Team:
+      <select name="team" id="stint-team">
+        {% for team in teams %}
+        <option value="{{ team.id }}">{{ team.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <input type="date" id="date-start" name="date_start" />
+
+    <button class="link-btn generate-btn">Add New Stint</button>
+  </form>
+  <div id="messages">
+    <h4 class="message">{{ message }}</h4>
+  </div>
+</div>
+
+{% endblock %}{% block scripts %}
+<script src="{{ url_for('static', path='/javascript/new_stint.js') }}"></script>
+{% endblock%}

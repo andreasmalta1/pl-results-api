@@ -13,13 +13,14 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from pydantic import EmailStr
+from datetime import date
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 import os
 
 from app.config import Settings
 from app.database import get_db
-from app.models import Manager, Nation, Team, User
+from app.models import Manager, Nation, Stints, Team, User
 from app.oauth2 import oauth_login, get_current_user_from_token
 from app.utils import bucket_upload
 
@@ -175,7 +176,7 @@ def new_manager(
     user: User = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
-    nations = db.query(Nation).all()
+    nations = db.query(Nation).order_by(Nation.name).all()
     return templates.TemplateResponse(
         "new_manager.html", {"request": request, "nations": nations}
     )
@@ -218,12 +219,59 @@ def add_new_manager(
     finally:
         os.remove(temp.name)
 
-    nations = db.query(Nation).all()
+    nations = db.query(Nation).order_by(Nation.name).all()
     return templates.TemplateResponse(
         "new_manager.html",
         {
             "request": request,
             "message": "New Manager added successfully",
             "nations": nations,
+        },
+    )
+
+
+@router.get("/new-stint", include_in_schema=False)
+def new_stint(
+    request: Request,
+    user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    teams = db.query(Team).order_by(Team.name).all()
+    managers = db.query(Manager).order_by(Manager.name).all()
+    return templates.TemplateResponse(
+        "new_stint.html", {"request": request, "teams": teams, "managers": managers}
+    )
+
+
+@router.post("/new-stint", include_in_schema=False)
+def add_new_stint(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user_from_token),
+    manager: str = Form(...),
+    team: str = Form(...),
+    date_start: date = Form(...),
+):
+    stint_dict = {
+        "manager_id": manager,
+        "team_id": team,
+        "date_start": date_start,
+        "current": True,
+    }
+
+    new_stint = Stints(**stint_dict)
+    db.add(new_stint)
+    db.commit()
+    db.refresh(new_stint)
+
+    teams = db.query(Team).order_by(Team.name).all()
+    managers = db.query(Manager).order_by(Manager.name).all()
+    return templates.TemplateResponse(
+        "new_stint.html",
+        {
+            "request": request,
+            "message": "New Stint added successfully",
+            "teams": teams,
+            "managers": managers,
         },
     )
