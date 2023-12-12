@@ -20,7 +20,7 @@ import os
 
 from app.config import Settings
 from app.database import get_db
-from app.models import Manager, Nation, Stints, Team, User
+from app.models import Manager, Nation, LastRow, Season, Stints, Team, User
 from app.oauth2 import oauth_login, get_current_user_from_token
 from app.utils import bucket_upload
 
@@ -314,5 +314,70 @@ def end_current_stint(
             "request": request,
             "message": "Stint ended successfully",
             "stints": stints,
+        },
+    )
+
+
+@router.get("/new-season", include_in_schema=False)
+def new_season(
+    request: Request,
+    user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    current_teams = db.query(Team).filter(Team.current_team == True).all()
+    non_current_teams = db.query(Team).filter(Team.current_team == False).all()
+
+    return templates.TemplateResponse(
+        "new_season.html",
+        {
+            "request": request,
+            "current_teams": current_teams,
+            "non_current_teams": non_current_teams,
+        },
+    )
+
+
+@router.post("/new-season", include_in_schema=False)
+async def start_new_season(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user_from_token),
+):
+    form_data = await request.form()
+    promoted_teams, relegated_teams = [], []
+
+    for key, value in form_data.items():
+        if value == "on":
+            if "promoted" in key:
+                promoted_teams.append(key.replace("promoted_", ""))
+            if "releagted" in key:
+                relegated_teams.append(key.replace("releagted_", ""))
+
+    last_row = db.query(LastRow).filter(LastRow.id == 1).first()
+    last_row.last_row = -1
+
+    season = db.query(Season).filter(Season.id == 1).first()
+    new_season = int(season.season.split("/")[0]) + 1
+    season.season = f"{new_season}/{new_season + 1}"
+
+    for team in promoted_teams:
+        promoted_team = db.query(Team).filter(Team.id == team).first()
+        promoted_team.current_team = True
+
+    for team in relegated_teams:
+        releagted_team = db.query(Team).filter(Team.id == team).first()
+        releagted_team.current_team = False
+
+    db.commit()
+
+    current_teams = db.query(Team).filter(Team.current_team == True).all()
+    non_current_teams = db.query(Team).filter(Team.current_team == False).all()
+    return templates.TemplateResponse(
+        "new_season.html",
+        {
+            "request": request,
+            "message": "New season started successfully",
+            "current_teams": current_teams,
+            "non_current_teams": non_current_teams,
         },
     )
