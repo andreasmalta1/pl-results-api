@@ -19,7 +19,7 @@ import os
 
 from app.config import Settings
 from app.database import get_db
-from app.models import Team, User
+from app.models import Nation, Team, User
 from app.oauth2 import oauth_login, get_current_user_from_token
 from app.utils import bucket_upload
 
@@ -119,4 +119,51 @@ def add_new_team(
 
     return templates.TemplateResponse(
         "new_team.html", {"request": request, "message": "New Team added successfully"}
+    )
+
+
+@router.get("/new-nation", include_in_schema=False)
+def new_nation(request: Request, user: User = Depends(get_current_user_from_token)):
+    return templates.TemplateResponse("new_nation.html", {"request": request})
+
+
+@router.post("/new-nation", include_in_schema=False)
+def add_new_nation(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user_from_token),
+    nation_name: str = Form(...),
+    nation_image: UploadFile = File(...),
+):
+    nation_dict = {"name": nation_name}
+
+    new_nation = Nation(**nation_dict)
+    db.add(new_nation)
+    db.commit()
+    db.refresh(new_nation)
+
+    temp = NamedTemporaryFile(delete=False, suffix=".png")
+    try:
+        try:
+            contents = nation_image.file.read()
+            with temp as temp_file:
+                temp_file.write(contents)
+        except Exception:
+            raise HTTPException(status_code=500, detail="Error on uploading the file")
+        finally:
+            nation_image.file.close()
+
+        bucket_upload.upload_to_bucket("nations", temp.name, new_nation.id)
+        image_url = f"{BUCKET_HOST}/nations/{new_nation.id}.png"
+        new_nation.flag = image_url
+        db.commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
+    finally:
+        os.remove(temp.name)
+
+    return templates.TemplateResponse(
+        "new_nation.html",
+        {"request": request, "message": "New Nation added successfully"},
     )

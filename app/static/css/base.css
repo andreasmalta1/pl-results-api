@@ -133,6 +133,19 @@ textarea {
   width: 50%;
 }
 
+input[type="file"] {
+  font: inherit;
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 12px 20px;
+  margin-top: 25px;
+  box-sizing: border-box;
+  border: none;
+  background-color: #2b2a2a;
+  width: 50%;
+}
+
 .message {
   margin-bottom: 35px;
 }

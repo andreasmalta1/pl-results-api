@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block styles%}
+<link
+  href="{{ url_for('static', path='/css/new_nation.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block title %} PL Results API | Add New Nation {% endblock %}
+{% block content %}
+
+<div class="main-container">
+  <h1 class="main-header">Admin - Add New Nation</h1>
+  <form
+    action="{{ url_for('add_new_nation')}}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input
+      type="text"
+      id="nation-name"
+      name="nation_name"
+      placeholder="Nation Name"
+      autocomplete="off"
+      required
+    />
+
+    <input type="file" id="nation-image" name="nation_image" />
+
+    <button class="link-btn generate-btn">Add New Nation</button>
+  </form>
+  <div id="messages">
+    <h4 class="message">{{ message }}</h4>
+  </div>
+</div>
+
+{% endblock %}
