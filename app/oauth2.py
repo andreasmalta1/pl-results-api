@@ -1,8 +1,8 @@
-from fastapi import status, Depends, HTTPException, Request, Response
+from fastapi import status, Depends, HTTPException, Request
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
-from jose import JWTError, jwt
+from jose import JWTError, jwt, ExpiredSignatureError
 from contextlib import contextmanager
 from typing import Dict, Optional
 import hashlib
@@ -99,8 +99,11 @@ def decode_token(token: str) -> User:
         username: str = payload.get("username")
         if username is None:
             raise credentials_exception
-    except JWTError as e:
-        print(e)
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="The token has expired"
+        )
+    except JWTError:
         raise credentials_exception
 
     with contextmanager(get_db)() as db:
