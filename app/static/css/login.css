@@ -12,14 +12,6 @@
   }
 }
 
-@media (max-width: 1100px) {
-  .generate-btn,
-  input[type="email"],
-  input[type="password"] {
-    width: 80%;
-  }
-}
-
 @media (max-width: 650px) {
   .generate-btn,
   input[type="email"],
