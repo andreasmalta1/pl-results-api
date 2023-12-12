@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import requests
-import boto3
+
 from datetime import datetime
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
@@ -11,11 +11,10 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
 from app.models import Team, Match, LastRow, Season, Nation, Manager, Stints
+from utils.bucket_upload import upload_to_bucket
 import new_matches
 
-ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-SECRET_KEY = os.getenv("AWS_SECRET_KEY")
-BUCKET = os.getenv("AWS_BUCKET")
+
 BUCKET_HOST = os.getenv("BUCKET_HOST")
 
 CARETAKER_MANAGER = "‡"
@@ -202,21 +201,6 @@ def get_pl_managers():
         with contextmanager(get_db)() as db:
             db.add_all(list_stints)
             db.commit()
-
-
-def upload_to_bucket(folder_name, file_name, image_id):
-    client = boto3.client(
-        "s3", aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY
-    )
-
-    key = f"{folder_name}/{image_id}.png"
-    with open(f"images/{folder_name}/{file_name}.png", "rb") as image_file:
-        client.put_object(
-            Bucket=BUCKET,
-            Key=key,
-            Body=image_file,
-            ContentType="image/png",
-        )
 
 
 def main():
