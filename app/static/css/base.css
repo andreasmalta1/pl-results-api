@@ -118,6 +118,7 @@ form {
 
 input[type="email"],
 input[type="text"],
+input[type="password"],
 textarea {
   font: inherit;
   display: block;
