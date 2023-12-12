@@ -351,7 +351,7 @@ async def start_new_season(
             if "promoted" in key:
                 promoted_teams.append(key.replace("promoted_", ""))
             if "releagted" in key:
-                relegated_teams.append(key.replace("releagted_", ""))
+                relegated_teams.append(key.replace("relegated_", ""))
 
     last_row = db.query(LastRow).filter(LastRow.id == 1).first()
     last_row.last_row = -1

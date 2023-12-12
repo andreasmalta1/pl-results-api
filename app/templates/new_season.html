@@ -12,7 +12,7 @@ block content %}
     <h4>Relegated Teams</h4>
     {% for team in current_teams %}
     <label for="{{ team.id }}">{{team.name}} </label>
-    <input type="checkbox" id="current" name="releagted_{{ team.id }}" />
+    <input type="checkbox" id="current" name="relegated_{{ team.id }}" />
     {% endfor %}
 
     <h4>Promoted Teams</h4>
