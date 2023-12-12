@@ -275,3 +275,44 @@ def add_new_stint(
             "managers": managers,
         },
     )
+
+
+@router.get("/end-stint", include_in_schema=False)
+def end_stint(
+    request: Request,
+    user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    stints = (
+        db.query(Stints).join(Manager).join(Team).filter(Stints.current == True).all()
+    )
+    return templates.TemplateResponse(
+        "end_stint.html", {"request": request, "stints": stints}
+    )
+
+
+@router.post("/end-stint", include_in_schema=False)
+def end_current_stint(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user_from_token),
+    stint: str = Form(...),
+    date_end: date = Form(...),
+):
+    stint = db.query(Stints).filter(Stints.id == stint).first()
+
+    stint.date_end = date_end
+    stint.current = False
+    db.commit()
+
+    stints = (
+        db.query(Stints).join(Manager).join(Team).filter(Stints.current == True).all()
+    )
+    return templates.TemplateResponse(
+        "end_stint.html",
+        {
+            "request": request,
+            "message": "Stint ended successfully",
+            "stints": stints,
+        },
+    )
