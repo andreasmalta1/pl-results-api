@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block styles%}
 <link
-  href="{{ url_for('static', path='/css/new_manager.css') }}"
+  href="{{ url_for('static', path='/css/new_season.css') }}"
   rel="stylesheet"
 />
 {% endblock %} {% block title %} PL Results API | New Season {% endblock %} {%
@@ -9,17 +9,25 @@ block content %}
 <div class="main-container">
   <h1 class="main-header">Admin - New Season</h1>
   <form action="{{ url_for('start_new_season')}}" method="post">
-    <h4>Relegated Teams</h4>
-    {% for team in current_teams %}
-    <label for="{{ team.id }}">{{team.name}} </label>
-    <input type="checkbox" id="current" name="relegated_{{ team.id }}" />
-    {% endfor %}
+    <div class="form">
+      <h3>Relegated Teams</h3>
+      {% for team in current_teams %}
+      <div class="teams">
+        <label for="{{ team.id }}">{{team.name}} </label>
+        <input type="checkbox" id="current" name="relegated_{{ team.id }}" />
+      </div>
+      {% endfor %}
+    </div>
 
-    <h4>Promoted Teams</h4>
-    {% for team in non_current_teams %}
-    <label for="{{ team.id }}">{{team.name}} </label>
-    <input type="checkbox" id="current" name="promoted_{{ team.id }}" />
-    {% endfor %}
+    <div class="form">
+      <h3>Promoted Teams</h3>
+      {% for team in non_current_teams %}
+      <div class="teams">
+        <label for="{{ team.id }}">{{team.name}} </label>
+        <input type="checkbox" id="current" name="promoted_{{ team.id }}" />
+      </div>
+      {% endfor %}
+    </div>
 
     <button class="link-btn generate-btn">Start New Season</button>
   </form>

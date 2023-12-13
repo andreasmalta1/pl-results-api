@@ -1,0 +1,45 @@
+h3 {
+  color: #bb86fc;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.form {
+  width: 90%;
+}
+
+.teams {
+  display: flex;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+label {
+  width: 50%;
+  padding: 12px;
+  text-align: left;
+}
+
+input[type="checkbox"] {
+  vertical-align: left;
+}
+
+.generate-btn {
+  font-size: 101%;
+  margin-top: 50px;
+  width: 50%;
+}
+
+@media (max-width: 1100px) {
+  .generate-btn,
+  input {
+    width: 80%;
+  }
+}
+
+@media (max-width: 650px) {
+  .generate-btn,
+  input {
+    width: 95%;
+  }
+}
