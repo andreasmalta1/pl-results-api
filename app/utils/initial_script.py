@@ -127,11 +127,14 @@ def get_pl_managers():
 
     for row in rows:
         name = row.find("th").get_text().strip()
-        if CARETAKER_MANAGER in name:
+        cells = row.find_all("td")
+        num_days = int(cells[4].get_text().strip())
+        if CARETAKER_MANAGER in name and num_days < 40:
             continue
 
-        name = name.replace(INCUMBENT_MANAGER, "").strip()
-        cells = row.find_all("td")
+        name = (
+            name.replace(INCUMBENT_MANAGER, "").replace(CARETAKER_MANAGER, "").strip()
+        )
 
         country = cells[0].find("a").find("img")["alt"]
         with contextmanager(get_db)() as db:
@@ -212,8 +215,8 @@ def get_pl_managers():
 def main():
     set_details()
     create_teams()
-    get_pl_matches()
-    new_matches.main()
+    # get_pl_matches()
+    # new_matches.main()
     get_pl_managers()
 
 
