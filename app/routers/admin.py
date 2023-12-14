@@ -65,7 +65,7 @@ async def login(
     return response
 
 
-@router.get("/logout")
+@router.get("/logout", include_in_schema=False)
 def logout():
     response = RedirectResponse(url="/")
     response.delete_cookie(Settings.COOKIE_NAME)
