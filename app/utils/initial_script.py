@@ -215,8 +215,8 @@ def get_pl_managers():
 def main():
     set_details()
     create_teams()
-    # get_pl_matches()
-    # new_matches.main()
+    get_pl_matches()
+    new_matches.main()
     get_pl_managers()
 
 
