@@ -1,37 +1,30 @@
 {% extends "base.html" %} {% block styles%}
-<link
-  href="{{ url_for('static', path='/css/register.css') }}"
-  rel="stylesheet"
-/>
+<link href="{{ url_for('static', path='/css/admin.css') }}" rel="stylesheet" />
 {% endblock %} {% block title %} PL Results API | Register {% endblock %} {%
 block content %}
 
 <div class="main-container">
   <h1 class="main-header">Admin</h1>
-  <a href="{{ url_for('new_team') }}" class="nav-item" style="--i: 0"
-    >Add New Team</a
-  >
-  <br />
-  <a href="{{ url_for('new_nation') }}" class="nav-item" style="--i: 1"
-    >Add New Nation</a
-  >
-  <br />
-  <a href="{{ url_for('new_manager') }}" class="nav-item" style="--i: 2"
-    >Add New Manager</a
-  >
-  <br />
-  <a href="{{ url_for('new_stint') }}" class="nav-item" style="--i: 3"
-    >Add New Stint</a
-  >
-  <br />
-  <a href="{{ url_for('end_stint') }}" class="nav-item" style="--i: 4"
-    >End Stint</a
-  >
-  <br />
-  <a href="{{ url_for('new_season') }}" class="nav-item" style="--i: 5"
-    >New Season</a
-  >
-  <br />
+  <div class="admin-links">
+    <a href="{{ url_for('new_team') }}" class="admin-link" style="--i: 0"
+      >Add New Team</a
+    >
+    <a href="{{ url_for('new_nation') }}" class="admin-link" style="--i: 1"
+      >Add New Nation</a
+    >
+    <a href="{{ url_for('new_manager') }}" class="admin-link" style="--i: 2"
+      >Add New Manager</a
+    >
+    <a href="{{ url_for('new_stint') }}" class="admin-link" style="--i: 3"
+      >Add New Stint</a
+    >
+    <a href="{{ url_for('end_stint') }}" class="admin-link" style="--i: 4"
+      >End Stint</a
+    >
+    <a href="{{ url_for('new_season') }}" class="admin-link" style="--i: 5"
+      >New Season</a
+    >
+  </div>
 </div>
 
 {% endblock %} {% block scripts %}

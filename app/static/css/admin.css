@@ -1,0 +1,17 @@
+.admin-links {
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.admin-link {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #ddd;
+  transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+  color: #03dac5;
+  padding-left: 25px;
+}
