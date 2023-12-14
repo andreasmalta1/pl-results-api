@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.path[0])))
 
 from app.database import get_db
 from app.models import Team, Match, LastRow, Season, Nation, Manager, Stints
-from utils.bucket_upload import upload_to_bucket
+from app.utils import bucket_upload
 import new_matches
 
 
@@ -44,8 +44,10 @@ def create_teams():
                 db.commit()
                 team_id = team_obj.id
 
-            upload_to_bucket(
-                "clubs", team.get("name").lower().replace(" ", "-"), team_id
+            bucket_upload.upload_to_bucket(
+                "clubs",
+                f"images/clubs/{team.get('name').lower().replace(' ', '-')}.png",
+                team_id,
             )
 
             image_url = f"{BUCKET_HOST}/clubs/{team_id}.png"
@@ -144,7 +146,11 @@ def get_pl_managers():
                 db.commit()
                 country_id = country_obj.id
 
-            upload_to_bucket("nations", country.lower().replace(" ", "-"), country_id)
+            bucket_upload.upload_to_bucket(
+                "nations",
+                f"images/nations/{country.lower().replace(' ', '-')}.png",
+                country_id,
+            )
 
             image_url = f"{BUCKET_HOST}/nations/{country_id}.png"
             with contextmanager(get_db)() as db:
@@ -204,10 +210,10 @@ def get_pl_managers():
 
 
 def main():
-    # set_details()
-    # create_teams()
-    # get_pl_matches()
-    # new_matches.main()
+    set_details()
+    create_teams()
+    get_pl_matches()
+    new_matches.main()
     get_pl_managers()
 
 
