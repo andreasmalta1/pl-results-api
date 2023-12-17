@@ -1,10 +1,16 @@
 select {
   border-radius: 5px;
+  text-align: center;
 }
 
 @media (max-width: 650px) {
   .select {
     text-align: center;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .admin-label {
     padding: 0;
   }
 }
