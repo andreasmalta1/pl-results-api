@@ -13,8 +13,13 @@ block content %}
       <h3>Relegated Teams</h3>
       {% for team in current_teams %}
       <div class="teams">
-        <label for="{{ team.id }}">{{team.name}} </label>
-        <input type="checkbox" id="current" name="relegated_{{ team.id }}" />
+        <label for="{{ team.id }}" class="label-team">{{team.name}} </label>
+        <input
+          class="check-team"
+          type="checkbox"
+          id="current"
+          name="relegated_{{ team.id }}"
+        />
       </div>
       {% endfor %}
     </div>
@@ -23,8 +28,13 @@ block content %}
       <h3>Promoted Teams</h3>
       {% for team in non_current_teams %}
       <div class="teams">
-        <label for="{{ team.id }}">{{team.name}} </label>
-        <input type="checkbox" id="current" name="promoted_{{ team.id }}" />
+        <label for="{{ team.id }}" class="label-team">{{team.name}} </label>
+        <input
+          class="check-team"
+          type="checkbox"
+          id="current"
+          name="promoted_{{ team.id }}"
+        />
       </div>
       {% endfor %}
     </div>

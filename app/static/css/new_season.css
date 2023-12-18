@@ -14,32 +14,39 @@ h3 {
   vertical-align: middle;
 }
 
-label {
+.label-team {
   width: 50%;
   padding: 12px;
   text-align: left;
+  margin: 0;
 }
 
-input[type="checkbox"] {
+.check-team {
   vertical-align: left;
+  padding: 0;
 }
 
-.generate-btn {
-  font-size: 101%;
-  margin-top: 50px;
-  width: 50%;
-}
-
-@media (max-width: 1100px) {
-  .generate-btn,
-  input {
-    width: 80%;
+@media (max-width: 1400px) {
+  .label-team {
+    width: 75%;
   }
 }
 
-@media (max-width: 650px) {
-  .generate-btn,
+@media (max-width: 1100px) {
   input {
-    width: 95%;
+    width: 3.5%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .main-container {
+    width: 90%;
+    padding: 0px 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  input {
+    width: 4%;
   }
 }
