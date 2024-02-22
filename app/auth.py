@@ -27,7 +27,7 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
         hashed_key = hashlib.sha256()
         hashed_key.update(bytes.fromhex(api_key_header))
         hashed_key = hashed_key.hexdigest()
-    except ValueError:
+    except (ValueError, TypeError):
         authorization_error()
 
     with contextmanager(get_db)() as db:
